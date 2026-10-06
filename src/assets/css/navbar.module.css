@@ -1,0 +1,246 @@
+/* navbar.css - Con tu paleta de colores */
+
+:root {
+  --fondo-principal: #0A0C10;
+  --fondo-secundario: #14171C;
+  --primario: #00DAFF;
+  --primario-hover: #0088CC;
+  --exito: #00E5A0;
+  --alerta: #FF8C42;
+  --texto-principal: #E8EDF2;
+  --texto-secundario: #889280;
+  --bordes: #1F2937;
+  --error: #FF3B5C;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 1.5rem;
+  background-color: var(--fondo-principal);
+  color: var(--texto-principal);
+  border-bottom: 2px solid var(--bordes);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo a {
+  color: var(--texto-principal);
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.logo a:hover {
+  color: var(--primario);
+}
+
+.logo1 {
+  min-width: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+.texto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0.5rem;
+}
+
+.texto1, .texto2 {
+  font-size: 25px;
+}
+
+.texto2 {
+  color: var(--primario);
+}
+
+.arr {
+  width: 35px;
+}
+
+.menu {
+ 
+  display: flex;
+  gap: 1rem;
+}
+
+.navLink {
+  color: var(--texto-principal);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.navLink:hover {
+  border-bottom: 2px solid var(--primario);
+  color: var(--primario);
+}
+
+/* ESTADO ACTIVO PARA ENLACES DEL MENÚ */
+.navLink.active {
+  border-bottom: 2px solid var(--primario);
+  color: var(--primario);
+}
+
+.authButtons {
+  display: flex;
+  gap: 1rem;
+}
+
+.loginBtn,
+.registerBtn {
+  padding: 0.4rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.loginBtn {
+  background-color: transparent;
+  border: 2px solid var(--bordes);
+  color: var(--texto-principal);
+}
+
+.loginBtn:hover {
+  background-color: rgba(0, 218, 255, 0.1);
+  border-color: var(--primario);
+  color: var(--primario);
+}
+
+/* ESTADO ACTIVO PARA LOGIN */
+.loginBtn.active {
+  background-color: var(--primario);
+  color: var(--fondo-principal);
+  border-color: var(--primario);
+  box-shadow: 0 2px 8px rgba(0, 218, 255, 0.3);
+}
+
+.registerBtn {
+  background-color: var(--primario);
+  color: var(--fondo-principal);
+  border: none;
+}
+
+.registerBtn:hover {
+  background-color: var(--primario-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 218, 255, 0.3);
+}
+
+/* ESTADO ACTIVO PARA REGISTER */
+.registerBtn.active {
+  background-color: var(--primario-hover);
+  box-shadow: 0 2px 8px rgba(0, 218, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Versión simplificada del content sin gradientes azules */
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 50vh;
+  background: var(--fondo-principal);
+  color: var(--texto-principal);
+}
+
+/* Menú hamburguesa para responsive (opcional) */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 4px;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: var(--texto-principal);
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+  
+  .menu {
+    position: fixed;
+    top: 60px;
+    left: -100%;
+    flex-direction: column;
+    background-color: var(--fondo-secundario);
+    width: 100%;
+    text-align: center;
+    transition: 0.3s ease;
+    padding: 1rem 0;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--bordes);
+  }
+  
+  .menu.open {
+    left: 0;
+  }
+  
+  .navLink {
+    padding: 0.8rem 1rem;
+    display: block;
+  }
+  
+  .authButtons {
+    margin-left: auto;
+    margin-right: 1rem;
+  }
+  
+  .loginBtn, .registerBtn {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .texto1, .texto2 {
+    font-size: 18px;
+  }
+  
+  .arr {
+    width: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.4rem 1rem;
+  }
+  
+  .logo a {
+    font-size: 1.2rem;
+  }
+  
+  .authButtons {
+    gap: 0.5rem;
+  }
+  
+  .loginBtn, .registerBtn {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+  }
+  
+  .texto1, .texto2 {
+    font-size: 14px;
+  }
+  
+  .arr {
+    width: 20px;
+  }
+}

@@ -1,0 +1,67 @@
+/* src/index.css - Con tu paleta de colores */
+
+:root {
+  --fondo-principal: #0A0C10;
+  --fondo-secundario: #14171C;
+  --primario: #00DAFF;
+  --primario-hover: #0088CC;
+  --exito: #00E5A0;
+  --alerta: #FF8C42;
+  --texto-principal: #E8EDF2;
+  --texto-secundario: #889280;
+  --bordes: #1F2937;
+  --error: #FF3B5C;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-color: var(--fondo-principal) !important;
+  color: var(--texto-principal);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Utilidades opcionales basadas en tu paleta */
+.text-primary {
+  color: var(--primario);
+}
+
+.text-secondary {
+  color: var(--texto-secundario);
+}
+
+.text-success {
+  color: var(--exito);
+}
+
+.text-alert {
+  color: var(--alerta);
+}
+
+.bg-primary {
+  background-color: var(--fondo-principal);
+}
+
+.bg-secondary {
+  background-color: var(--fondo-secundario);
+}
+
+.border-color {
+  border-color: var(--bordes);
+}

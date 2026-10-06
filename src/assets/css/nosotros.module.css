@@ -1,0 +1,539 @@
+/* nosotros.module.css - Con tu paleta de colores */
+/* Variables directamente en el contenedor principal para React */
+
+/* Estilos base */
+.containerPrincipal {
+  /* Colores */
+  --fondo-principal: #0A0C10;
+  --fondo-secundario: #14171C;
+  --primario: #00DAFF;
+  --primario-hover: #0088CC;
+  --exito: #00E5A0;
+  --alerta: #FF8C42;
+  --texto-principal: #E8EDF2;
+  --texto-secundario: #889280;
+  --bordes: #1F2937;
+  --error: #FF3B5C;
+  --oro: #FFD700;
+  
+  /* Tipografía responsive */
+  --font-h1: clamp(2rem, 5vw, 3rem);
+  --font-h2: clamp(1.5rem, 4vw, 2.5rem);
+  --font-h3: clamp(1.25rem, 3vw, 1.5rem);
+  --font-body: clamp(0.85rem, 1.5vw, 1rem);
+  --font-small: clamp(0.75rem, 1.2vw, 0.85rem);
+  --font-xs: clamp(0.7rem, 1vw, 0.75rem);
+  --font-xxs: clamp(0.65rem, 0.9vw, 0.7rem);
+  
+  /* Sombras */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 5px 20px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 20px rgba(0, 218, 255, 0.3);
+  
+  /* Transiciones */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  
+  /* Bordes */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 50%;
+  
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--fondo-principal);
+  color: var(--texto-principal);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Sección Hero */
+.heroSection {
+  padding: 6rem 2rem 4rem;
+  background: var(--fondo-secundario);
+  text-align: center;
+  border-bottom: 1px solid var(--bordes);
+}
+
+.heroContent {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.heroTitle {
+  font-size: var(--font-h1);
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  color: var(--texto-principal);
+  line-height: 1.2;
+}
+
+.heroHighlight {
+  color: var(--primario);
+  text-shadow: 0 2px 10px rgba(0, 218, 255, 0.3);
+}
+
+.heroSubtitle {
+  font-size: var(--font-h3);
+  color: var(--texto-secundario);
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
+}
+
+.heroStats {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin-top: 3rem;
+  flex-wrap: wrap;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statNumber {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--primario);
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  font-size: 1rem;
+  color: var(--texto-secundario);
+}
+
+/* Encabezados de sección */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+.sectionTitle {
+  font-size: var(--font-h2);
+  color: var(--primario);
+  font-weight: 800;
+  margin-bottom: 1rem;
+  text-shadow: var(--shadow-glow);
+}
+
+.sectionSubtitle {
+  font-size: var(--font-h3);
+  color: var(--texto-secundario);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Sección: Tipos de Canje */
+.premiosSection {
+  padding: 5rem 2rem;
+  background: rgba(10, 12, 16, 0.8);
+}
+
+.tiposCanjeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.canjeCard {
+  background: var(--fondo-secundario);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid var(--bordes);
+  border-top: 4px solid var(--primario);
+}
+
+.canjeCard:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-glow);
+  border-color: var(--primario);
+}
+
+.canjeIcon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.canjeTitle {
+  font-size: var(--font-h3);
+  color: var(--texto-principal);
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.canjeDesc {
+  color: var(--texto-secundario);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.ejemplosList {
+  background: var(--fondo-principal);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--bordes);
+}
+
+.ejemploItem {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+  color: var(--texto-principal);
+}
+
+.ejemploItem:last-child {
+  margin-bottom: 0;
+}
+
+.ejemploIcon {
+  color: var(--primario);
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.canjeBadge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  margin-top: auto;
+}
+
+/* Sección: Tiendas Afiliadas */
+.tiendasSection {
+  padding: 5rem 2rem;
+  background: rgba(10, 12, 16, 0.8);
+}
+
+.tiendasGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+}
+
+.tiendaCard {
+  background: var(--fondo-secundario);
+  border-radius: var(--radius-lg);
+  padding: 1.8rem;
+  border: 1px solid var(--bordes);
+  transition: transform var(--transition-normal);
+}
+
+.tiendaCard:hover {
+  transform: translateY(-3px);
+  border-color: var(--primario);
+}
+
+.tiendaHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.tiendaIcono {
+  font-size: 2.5rem;
+  background: rgba(0, 218, 255, 0.1);
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tiendaNombre {
+  font-size: 1.3rem;
+  color: var(--texto-principal);
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.tiendaCategoria {
+  font-size: 0.9rem;
+  color: var(--texto-secundario);
+}
+
+.tiendaBeneficio {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(0, 218, 255, 0.05);
+  padding: 1.2rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--bordes);
+}
+
+.beneficioIcon {
+  font-size: 1.5rem;
+  color: var(--primario);
+}
+
+.beneficioInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.beneficioTitulo {
+  font-size: 0.85rem;
+  color: var(--texto-secundario);
+  margin-bottom: 0.2rem;
+}
+
+.beneficioTexto {
+  color: var(--primario);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.tiendaVentajas {
+  display: flex;
+  gap: 1rem;
+}
+
+.ventaja {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--texto-secundario);
+  font-size: 0.9rem;
+}
+
+.ventajaIcon {
+  color: var(--exito);
+  font-size: 0.9rem;
+}
+
+.tiendasNota {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(255, 140, 66, 0.1);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--alerta);
+  text-align: center;
+}
+
+.tiendasNota p {
+  color: var(--texto-principal);
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* ============================================= */
+/* FOOTER */
+/* ============================================= */
+
+.footer {
+  background: var(--fondo-secundario);
+  border-top: 1px solid var(--bordes);
+  padding: 3rem 2rem 1.5rem;
+  margin-top: 4rem;
+  width: 100%;
+}
+
+.footerContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.footerCol h3,
+.footerCol h4 {
+  color: var(--primario);
+  margin-bottom: 1rem;
+}
+
+.footerCol h3 {
+  font-size: var(--font-h3);
+}
+
+.footerCol h4 {
+  font-size: var(--font-body);
+  font-weight: 600;
+}
+
+.footerLogo {
+  font-size: var(--font-h3);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primario), var(--exito));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+.footerDesc {
+  color: var(--texto-secundario);
+  font-size: var(--font-small);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.socialLinks a {
+  color: var(--texto-secundario);
+  font-size: 1.5rem;
+  transition: color var(--transition-fast);
+  text-decoration: none;
+}
+
+.socialLinks a:hover {
+  color: var(--primario);
+  transform: translateY(-2px);
+}
+
+.footerCol ul {
+  list-style: none;
+}
+
+.footerCol li {
+  margin-bottom: 0.6rem;
+  font-size: var(--font-small);
+  color: var(--texto-secundario);
+}
+
+.footerCol a {
+  color: var(--texto-secundario);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footerCol a:hover {
+  color: var(--primario);
+}
+
+.appButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.appBtn {
+  background: rgba(0, 218, 255, 0.1);
+  border: 1px solid var(--primario);
+  color: var(--primario);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--font-small);
+}
+
+.appBtn:hover {
+  background: var(--primario);
+  color: var(--fondo-principal);
+  transform: scale(1.02);
+}
+
+.footerBottom {
+  text-align: center;
+  padding-top: 2rem;
+  margin-top: 2rem;
+  border-top: 1px solid var(--bordes);
+  font-size: var(--font-xs);
+  color: var(--texto-secundario);
+}
+
+/* ============================================= */
+/* RESPONSIVE */
+/* ============================================= */
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 1.1rem;
+  }
+  
+  .heroStats {
+    gap: 2rem;
+  }
+  
+  .statNumber {
+    font-size: 2rem;
+  }
+  
+  .sectionTitle {
+    font-size: 2rem;
+  }
+  
+  .tiposCanjeGrid,
+  .tiendasGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .tiendaVentajas {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  /* Footer responsive */
+  .footer {
+    padding: 2rem 1rem 1rem;
+  }
+  
+  .footerContainer {
+    gap: 1.5rem;
+  }
+  
+  .footerCol {
+    text-align: center;
+  }
+  
+  .socialLinks {
+    justify-content: center;
+  }
+  
+  .appButtons {
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 2rem;
+  }
+  
+  .heroSection,
+  .premiosSection,
+  .tiendasSection {
+    padding: 3rem 1rem;
+  }
+  
+  .canjeCard,
+  .tiendaCard {
+    padding: 1.5rem;
+  }
+}

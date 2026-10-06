@@ -1,0 +1,418 @@
+/* src/assets/css/resetPassword.module.css */
+/* Variables directamente en el contenedor para React */
+
+.container {
+  /* Colores */
+  --fondo-principal: #0A0C10;
+  --fondo-secundario: #14171C;
+  --primario: #00DAFF;
+  --primario-hover: #0088CC;
+  --exito: #00E5A0;
+  --alerta: #FF8C42;
+  --texto-principal: #E8EDF2;
+  --texto-secundario: #889280;
+  --bordes: #1F2937;
+  --error: #FF3B5C;
+  
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 35px;
+  background: var(--fondo-secundario);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--bordes);
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.5s ease;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Línea superior decorativa */
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    var(--primario) 0%, 
+    var(--exito) 50%,
+    var(--alerta) 100%);
+}
+
+/* Icono decorativo de candado */
+.container::after {
+  content: '🔒';
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  font-size: 40px;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--primario);
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 5px rgba(0, 218, 255, 0.3);
+  position: relative;
+}
+
+.title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primario), var(--exito));
+  margin: 10px auto 0;
+  border-radius: 3px;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--texto-secundario);
+  font-size: 0.85rem;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.formGroup {
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--texto-secundario);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--fondo-principal);
+  border: 1px solid var(--bordes);
+  border-radius: 10px;
+  color: var(--texto-principal);
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.input:hover {
+  border-color: var(--primario);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primario);
+  box-shadow: 0 0 0 3px rgba(0, 218, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.input::placeholder {
+  color: var(--texto-secundario);
+  font-size: 12px;
+  font-weight: 300;
+}
+
+/* Indicador de seguridad de contraseña */
+.passwordStrength {
+  margin-top: 8px;
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.strengthWeak {
+  background: rgba(255, 59, 92, 0.2);
+  color: var(--error);
+}
+
+.strengthMedium {
+  background: rgba(255, 140, 66, 0.2);
+  color: var(--alerta);
+}
+
+.strengthStrong {
+  background: rgba(0, 229, 160, 0.2);
+  color: var(--exito);
+}
+
+.button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, var(--primario) 0%, var(--primario-hover) 100%);
+  color: var(--fondo-principal);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-top: 25px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.button:hover:not(:disabled)::before {
+  width: 300px;
+  height: 300px;
+}
+
+.button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 218, 255, 0.3);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.buttonDisabled {
+  width: 100%;
+  padding: 12px;
+  background: var(--bordes);
+  color: var(--texto-secundario);
+  border: 1px solid #2d3748;
+  border-radius: 10px;
+  cursor: not-allowed;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 25px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.buttonDisabled::after {
+  content: '⏳';
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: translateY(-50%) rotate(0deg); }
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+.error {
+  background: rgba(255, 59, 92, 0.1);
+  color: var(--error);
+  padding: 12px 15px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  text-align: center;
+  border: 1px solid rgba(255, 59, 92, 0.3);
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.error::before {
+  content: '⚠️';
+  font-size: 1rem;
+}
+
+.success {
+  background: rgba(0, 229, 160, 0.1);
+  color: var(--exito);
+  padding: 12px 15px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  text-align: center;
+  border: 1px solid rgba(0, 229, 160, 0.3);
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.success::before {
+  content: '✅';
+  font-size: 1rem;
+}
+
+.linkContainer {
+  margin-top: 25px;
+  text-align: center;
+  padding-top: 15px;
+  border-top: 1px solid var(--bordes);
+}
+
+.link {
+  color: var(--primario);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  position: relative;
+  padding: 3px 6px;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primario);
+  transition: width 0.3s ease;
+}
+
+.link:hover {
+  color: var(--primario-hover);
+  transform: translateX(-3px);
+}
+
+.link:hover::after {
+  width: 100%;
+}
+
+/* Tooltip de ayuda */
+.infoTooltip {
+  position: absolute;
+  right: 10px;
+  top: 38px;
+  color: var(--texto-secundario);
+  cursor: help;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.infoTooltip:hover {
+  color: var(--primario);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    margin: 40px 20px;
+    padding: 25px;
+  }
+  
+  .title {
+    font-size: 1.6rem;
+  }
+  
+  .subtitle {
+    font-size: 0.8rem;
+  }
+  
+  .input {
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+  
+  .button, .buttonDisabled {
+    padding: 11px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 20px 15px;
+    padding: 20px;
+  }
+  
+  .title {
+    font-size: 1.4rem;
+  }
+  
+  .formGroup label {
+    font-size: 0.75rem;
+  }
+  
+  .input {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  
+  .button, .buttonDisabled {
+    padding: 10px;
+    font-size: 12px;
+  }
+  
+  .error, .success {
+    padding: 10px 12px;
+    font-size: 0.75rem;
+  }
+  
+  .link {
+    font-size: 0.8rem;
+  }
+  
+  .container::after {
+    font-size: 30px;
+    bottom: 15px;
+    right: 15px;
+  }
+}

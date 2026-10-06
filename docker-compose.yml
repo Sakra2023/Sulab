@@ -1,0 +1,71 @@
+name: sulab
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: sulab-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: sakra2023
+      MYSQL_DATABASE: lap
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-psakra2023"]
+      timeout: 10s
+      retries: 10
+      interval: 5s
+      start_period: 30s
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: sulab-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=sakra2023
+      - DB_NAME=lap
+      - JWT_SECRET=gatO-volador-123-cafe-XyZ!-R2D2
+      - FRONTEND_URL=http://sulabb.com
+      #- FRONTEND_URL=http://192.168.100.13:8080
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./logs:/app/logs
+      - ./server/facturas_pdf:/app/server/facturas_pdf
+      - ./server/img-emprendimientos:/app/server/img-emprendimientos
+      - ./server/img-premios:/app/server/img-premios
+      - ./server/img-usuarios:/app/server/img-usuarios
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: sulab-frontend
+    ports:
+      - "8080:80"  # 👈 Puerto para el frontend
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:
+
+networks:
+  app-network:
+    driver: bridge

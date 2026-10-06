@@ -1,0 +1,3081 @@
+/* facturacion.module.css - Versión Corregida con Paleta de Colores del Sistema */
+/* Variables directamente en el contenedor para React */
+
+/* Reset y estilos base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenedor Principal - Ocupa todo el ancho - CORREGIDO: permite scroll */
+.facturacionContainer {
+  /* Colores principales */
+  --primary-color: #00DAFF;
+  --primary-light: #00C4E6;
+  --primary-dark: #0088CC;
+  
+  /* Colores de acento */
+  --success-color: #00E5A0;
+  --warning-color: #FF8C42;
+  --danger-color: #ef4444;
+  
+  /* Textos */
+  --text-primary: #1A1D24;
+  --text-secondary: #5C6A7A;
+  
+  /* Fondos y bordes */
+  --border-color: #D0D5DD;
+  --background-light: #F2F4F8;
+  --background-white: #FFFFFF;
+  
+  /* Sombras y efectos */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  
+  /* TAMAÑOS DE FUENTE GLOBALES */
+   --font-h1: clamp(1rem, 2vw, 1.6rem);
+  --font-h2: clamp(0.85rem, 1.5vw, 1.15rem);
+  --font-h3: clamp(0.95rem, 1.4vw, 1.3rem);
+  --font-subtitle-lg: clamp(0.85rem, 1.2vw, 1rem);
+  --font-subtitle-md: clamp(0.8rem, 1vw, 0.95rem);
+  --font-body: clamp(0.75rem, 0.9vw, 0.9rem);
+  --font-small: clamp(0.7rem, 0.8vw, 0.8rem);
+  --font-xs: clamp(0.6rem, 0.7vw, 0.7rem);
+  
+  padding: clamp(1rem, 3vw, 1.5rem);
+  background: var(--background-light);
+  min-height: 100vh;
+  height: 100%;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: var(--text-primary);
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Aplicación de fuentes a elementos HTML */
+h1 {
+  font-size: var(--font-h1);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: var(--font-h2);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+h3 {
+  font-size: var(--font-h3);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h4 {
+  font-size: var(--font-subtitle-lg);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+h5 {
+  font-size: var(--font-subtitle-md);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+body, p, .body-text {
+  font-size: var(--font-body);
+  line-height: 1.5;
+}
+
+small, .small-text {
+  font-size: var(--font-small);
+  line-height: 1.5;
+}
+
+.xs-text, .footnote, .helper-text {
+  font-size: var(--font-xs);
+  line-height: 1.5;
+}
+
+/* Encabezado */
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.tituloSection h1 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  letter-spacing: -0.025em;
+}
+
+.tituloIcono {
+  color: var(--primary-color);
+  font-size: var(--font-h3);
+}
+
+.subtitulo {
+  color: var(--text-secondary);
+  font-size: var(--font-subtitle-md);
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.accionesHeader {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btnAccion {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--primary-color);
+  color: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-small);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.btnAccion:hover {
+  background: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btnAccion.active {
+  background: var(--primary-dark);
+  box-shadow: var(--shadow-md);
+}
+
+/* NUEVA FACTURA - SIN RESUMEN FINANCIERO */
+.nuevaFacturaSection {
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
+}
+
+.facturaGridSinResumen {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .facturaGridSinResumen {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Panel Central Factura */
+.panelCentralFactura {
+  background: var(--background-white);
+  border-radius: var(--radius-lg);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  border: 1px solid var(--border-color);
+}
+
+.facturaHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.facturaHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin: 0;
+}
+
+.facturaInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.facturaNumero {
+  font-family: 'SF Mono', 'Courier New', monospace;
+  font-size: var(--font-subtitle-md);
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.facturaFecha {
+  font-size: var(--font-small);
+  color: var(--text-secondary);
+}
+
+/* Datos del Cliente */
+.datosClienteContainer {
+  background: var(--background-light);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.datosClienteContainer h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem 0;
+}
+
+.formDatosCliente {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  position: relative;
+}
+
+.formGroup label {
+  font-size: var(--font-small);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.formGroup label:after {
+  content: ' *';
+  color: var(--danger-color);
+  font-weight: normal;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-small);
+  color: var(--text-primary);
+  background: var(--background-white);
+  transition: all 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 218, 255, 0.1);
+}
+
+.btnLimpiarCliente {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: var(--background-light);
+  color: var(--text-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-small);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 1.375rem;
+}
+
+.btnLimpiarCliente:hover {
+  background: var(--border-color);
+}
+
+/* Sugerencias cliente */
+.sugerenciasCliente {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--background-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.sugerenciaCliente {
+  padding: 0.625rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 1px solid var(--background-light);
+}
+
+.sugerenciaCliente:hover {
+  background: rgba(0, 218, 255, 0.1);
+}
+
+.sugerenciaClienteNombre {
+  display: block;
+  font-size: var(--font-small);
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.sugerenciaClienteContacto {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+/* Búsqueda rápida */
+.busquedaRapidaContainer {
+  background: var(--background-light);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.busquedaRapidaHeader h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.75rem 0;
+}
+
+.formBusquedaRapida {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.busquedaRapidaInputGroup {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .busquedaRapidaInputGroup {
+    grid-template-columns: 1fr;
+  }
+}
+
+.busquedaProductoGroup {
+  position: relative;
+}
+
+.busquedaRapidaInput {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 2px solid var(--primary-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-subtitle-md);
+  color: var(--text-primary);
+  background: var(--background-white);
+  transition: all 0.2s;
+}
+
+.busquedaRapidaInput:focus {
+  outline: none;
+  border-color: var(--primary-dark);
+  box-shadow: 0 0 0 3px rgba(0, 218, 255, 0.1);
+}
+
+.busquedaIcono {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+}
+
+.cantidadBusquedaRapida {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.cantidadBusquedaRapida label {
+  font-size: var(--font-small);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.cantidadControles {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btnCantidad {
+  width: 2.25rem;
+  height: 2.25rem;
+  background: var(--primary-color);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 0.375rem;
+  font-size: var(--font-subtitle-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnCantidad:hover {
+  background: var(--primary-light);
+}
+
+.cantidadInput {
+  width: 3.75rem;
+  height: 2.25rem;
+  text-align: center;
+  border: 2px solid var(--border-color);
+  border-radius: 0.375rem;
+  font-size: var(--font-subtitle-md);
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--background-white);
+}
+
+.btnAgregarRapido {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--success-color);
+  color: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-subtitle-md);
+  cursor: pointer;
+  transition: all 0.2s;
+  height: fit-content;
+  align-self: flex-end;
+}
+
+.btnAgregarRapido:hover:not(:disabled) {
+  background: #00cc8a;
+}
+
+.btnAgregarRapido:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Sugerencias productos */
+.sugerenciasBusqueda {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-top: 0.5rem;
+}
+
+.sugerenciaItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: var(--background-white);
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.sugerenciaItem:hover,
+.sugerenciaItem.selected {
+  border-color: var(--primary-color);
+  background: rgba(0, 218, 255, 0.1);
+}
+
+.sugerenciaNombre {
+  flex: 1;
+  font-size: var(--font-small);
+  color: var(--text-primary);
+}
+
+.sugerenciaPrecio {
+  margin: 0 0.75rem;
+  font-size: var(--font-small);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.sugerenciaStock {
+  font-size: var(--font-xs);
+  color: var(--success-color);
+  font-weight: 600;
+  background: rgba(0, 229, 160, 0.1);
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+/* Producto preview */
+.productoPreview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--background-white);
+  border: 2px solid var(--success-color);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+}
+
+.productoPreviewInfo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.productoPreviewNombre {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--font-small);
+}
+
+.productoPreviewCodigo {
+  font-family: 'SF Mono', monospace;
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  background: var(--background-light);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+.productoPreviewPrecio {
+  color: var(--primary-color);
+  font-weight: 700;
+  font-size: var(--font-small);
+}
+
+.productoPreviewStock {
+  color: var(--success-color);
+  font-weight: 600;
+  font-size: var(--font-small);
+}
+
+.btnLimpiarSeleccion {
+  background: none;
+  border: none;
+  color: var(--danger-color);
+  cursor: pointer;
+  padding: 0.375rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s;
+  font-size: var(--font-subtitle-md);
+}
+
+.btnLimpiarSeleccion:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* ============================================ */
+/* ITEMS DE FACTURA - MANTENER FILA EN MÓVIL */
+/* ============================================ */
+
+.facturaItems {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.facturaItemsHeader {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 0.5fr;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 2px solid var(--border-color);
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: var(--font-small);
+}
+
+@media (max-width: 768px) {
+  .facturaItemsHeader {
+    display: none;
+  }
+}
+
+.facturaItemsLista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sinItems {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.sinItemsIcono {
+  font-size: var(--font-h3);
+  margin-bottom: 1rem;
+  color: var(--border-color);
+}
+
+.facturaItem {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 0.5fr;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--background-light);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+/* ============================================ */
+/* CORRECCIÓN: Items en móvil - 4 COLUMNAS: Producto, Cantidad, Subtotal, Acciones */
+/* ============================================ */
+@media (max-width: 768px) {
+  .facturaItem {
+    grid-template-columns: 1.5fr 0.8fr 0.8fr 0.5fr;
+    gap: 0.3rem;
+    padding: 0.4rem;
+    font-size: var(--font-xs);
+    overflow-x: auto;
+    white-space: nowrap;
+    align-items: center;
+  }
+  
+  /* Ocultar columna PRECIO */
+  .itemPrecio {
+    display: none !important;
+  }
+  
+  /* Ocultar detalles y código para ahorrar espacio */
+  .itemDetalles {
+    display: none;
+  }
+  
+  .itemCodigo {
+    display: none;
+  }
+  
+  /* Reducir todo al mínimo */
+  .itemNombre {
+    font-size: var(--font-xs);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 80px;
+  }
+  
+  .itemInfo {
+    gap: 0;
+    min-width: 0;
+  }
+  
+  .cantidadControlesSmall {
+    gap: 0.1rem;
+    padding: 0.05rem;
+  }
+  
+  .btnCantidadSmall {
+    width: 1.2rem;
+    height: 1.2rem;
+    font-size: var(--font-xs);
+  }
+  
+  .cantidadValor {
+    min-width: 1.2rem;
+    font-size: var(--font-xs);
+  }
+  
+  .itemSubtotal {
+    font-size: var(--font-xs);
+    text-align: center;
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .itemPuntos {
+    font-size: var(--font-xs);
+  }
+  
+  .btnRemoverItem {
+    padding: 0.2rem;
+    font-size: var(--font-xs);
+  }
+  
+  .itemInfo .itemNombre {
+    max-width: 70px;
+  }
+  
+  /* Etiquetas de columna en móvil */
+  .facturaItem::before {
+    display: none;
+  }
+}
+
+/* Estilos base de los elementos (fuera del media query) */
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.itemNombre {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: var(--font-small);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemDetalles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+}
+
+.itemDetalles span {
+  font-size: var(--font-xs);
+  background: var(--background-light);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  white-space: nowrap;
+}
+
+.itemCodigo {
+  font-family: 'SF Mono', monospace;
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+.cantidadControlesSmall {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--background-white);
+  border: 1px solid var(--border-color);
+  border-radius: 0.25rem;
+  padding: 0.125rem;
+  width: fit-content;
+}
+
+.btnCantidadSmall {
+  width: 1.5rem;
+  height: 1.5rem;
+  background: var(--background-light);
+  color: var(--text-secondary);
+  border: none;
+  border-radius: 0.1875rem;
+  font-size: var(--font-small);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnCantidadSmall:hover {
+  background: var(--border-color);
+}
+
+.cantidadValor {
+  min-width: 1.875rem;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--font-small);
+}
+
+.itemPrecio {
+  text-align: center;
+  font-weight: 600;
+  color: var(--primary-color);
+  font-size: var(--font-small);
+}
+
+.itemSubtotal {
+  text-align: center;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: var(--font-small);
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.itemPuntos {
+  font-size: var(--font-xs);
+  color: var(--success-color);
+  font-weight: 500;
+}
+
+.btnRemoverItem {
+  background: none;
+  border: none;
+  color: var(--danger-color);
+  cursor: pointer;
+  padding: 0.375rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s;
+}
+
+.btnRemoverItem:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Totales */
+.facturaTotales {
+  border-top: 2px solid var(--border-color);
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.totalRow span {
+  color: var(--text-secondary);
+  font-size: var(--font-small);
+}
+
+.totalRow strong {
+  color: var(--text-primary);
+  font-size: var(--font-subtitle-md);
+}
+
+.totalPuntos {
+  color: var(--success-color);
+  font-weight: 600;
+  background: rgba(0, 229, 160, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: var(--font-small);
+}
+
+.totalFinal {
+  color: var(--primary-color);
+  font-size: var(--font-h3);
+}
+
+/* Panel Derecho Pago */
+.panelDerechoPago {
+  background: var(--background-white);
+  border-radius: var(--radius-lg);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  box-shadow: var(--shadow-sm);
+  height: fit-content;
+  border: 1px solid var(--border-color);
+}
+
+.pagoSection h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin: 0 0 1.25rem 0;
+}
+
+.metodosPago {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.metodoPago {
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--background-white);
+}
+
+.metodoPago:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.metodoPago.selected {
+  border-color: var(--primary-color);
+  background: rgba(0, 218, 255, 0.1);
+}
+
+.metodoIcono {
+  font-size: var(--font-subtitle-lg);
+  color: var(--primary-color);
+}
+
+.metodoPago span {
+  font-size: var(--font-small);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.referenciaInput {
+  margin-bottom: 1.25rem;
+}
+
+.referenciaInput label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: var(--font-small);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.pagoRecibido {
+  margin-bottom: 1.25rem;
+}
+
+.pagoRecibido label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: var(--font-small);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.pagoInputContainer {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
+.pagoSimbolo {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--font-subtitle-md);
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.pagoInput {
+  width: 100%;
+  padding: 0.75rem 0.75rem 0.75rem 2rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-h3);
+  font-weight: 700;
+  color: var(--text-primary);
+  background: var(--background-white);
+  text-align: right;
+  transition: all 0.2s;
+}
+
+.pagoInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 218, 255, 0.1);
+}
+
+.vueltoSection {
+  background: var(--background-light);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.vueltoInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vueltoInfo span:first-child {
+  font-size: var(--font-subtitle-md);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.vueltoMonto {
+  font-size: var(--font-h2);
+  font-weight: 800;
+  color: var(--success-color);
+}
+
+.accionesFinales {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.btnCancelar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--background-light);
+  color: var(--text-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-subtitle-md);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnCancelar:hover {
+  background: var(--border-color);
+}
+
+.btnProcesar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--success-color);
+  color: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-subtitle-md);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnProcesar:hover {
+  background: #00cc8a;
+}
+
+.btnProcesar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnImprimir {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--primary-color);
+  color: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-subtitle-md);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnImprimir:hover {
+  background: var(--primary-light);
+}
+
+.btnImprimir:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== ESTILOS PARA TICKET DE IMPRESIÓN ===== */
+.ticketContainer {
+  width: 300px;
+  margin: 0 auto;
+  padding: 1.25rem;
+  background: var(--background-white);
+  font-family: 'Courier New', 'SF Mono', monospace;
+  font-size: var(--font-xs);
+  line-height: 1.4;
+  color: #000;
+}
+
+.ticketHeader {
+  text-align: center;
+  margin-bottom: 0.9375rem;
+}
+
+.ticketTitulo {
+  font-size: var(--font-subtitle-lg);
+  font-weight: bold;
+  margin: 0 0 0.3125rem 0;
+  text-transform: uppercase;
+}
+
+.ticketRfc,
+.ticketDireccion,
+.ticketTel {
+  font-size: var(--font-xs);
+  margin: 0.125rem 0;
+  color: #333;
+}
+
+.ticketSeparador {
+  text-align: center;
+  margin: 0.625rem 0;
+  font-size: var(--font-small);
+  letter-spacing: 2px;
+  color: #000;
+}
+
+.ticketInfo {
+  margin: 0.625rem 0;
+}
+
+.ticketRow {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.1875rem 0;
+  font-size: var(--font-xs);
+}
+
+.ticketNumero {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.ticketCliente {
+  margin: 0.625rem 0;
+  padding: 0.3125rem 0;
+  border-top: 1px dashed #000;
+  border-bottom: 1px dashed #000;
+}
+
+.ticketClienteNombre {
+  font-weight: bold;
+}
+
+.ticketProductosHeader {
+  display: grid;
+  grid-template-columns: 40px 1fr 60px 60px;
+  font-weight: bold;
+  font-size: var(--font-xs);
+  margin: 0.625rem 0 0.3125rem;
+  text-transform: uppercase;
+}
+
+.ticketProductoItem {
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.3125rem;
+  border-bottom: 1px dotted #ccc;
+}
+
+.ticketProductoRow {
+  display: grid;
+  grid-template-columns: 40px 1fr 60px 60px;
+  font-size: var(--font-xs);
+}
+
+.ticketTotales {
+  margin-top: 0.625rem;
+  padding-top: 0.3125rem;
+}
+
+.ticketTotalRow {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.1875rem 0;
+  font-size: var(--font-xs);
+}
+
+.ticketTotalFinal {
+  font-weight: bold;
+  font-size: var(--font-small);
+  border-top: 1px solid #000;
+  padding-top: 0.3125rem;
+  margin-top: 0.3125rem;
+  color: var(--primary-color);
+}
+
+.ticketPago {
+  margin-top: 0.625rem;
+  padding-top: 0.3125rem;
+  border-top: 1px dashed #000;
+}
+
+.ticketVuelto {
+  color: var(--success-color);
+  font-weight: bold;
+}
+
+.ticketFooter {
+  text-align: center;
+  margin-top: 0.9375rem;
+  font-size: var(--font-xs);
+}
+
+@media print {
+  body {
+    background: white;
+    margin: 0;
+    padding: 20px;
+  }
+  .ticketContainer {
+    box-shadow: none;
+    padding: 0;
+  }
+}
+
+/* ===== COMANDAS ===== */
+.comandasSection {
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
+}
+
+.comandasGrid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .comandasGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panelMesas {
+  background: var(--background-white);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  height: fit-content;
+  border: 1px solid var(--border-color);
+}
+
+.panelProductosMesa {
+  background: var(--background-white);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  min-height: 600px;
+  border: 1px solid var(--border-color);
+}
+
+.mesasContainer {
+  background: var(--background-white);
+  border-radius: var(--radius-lg);
+}
+
+.mesasHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.mesasHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.btnNuevaMesa {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--success-color);
+  color: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnNuevaMesa:hover {
+  background: #00cc8a;
+}
+
+.nuevaMesaForm {
+  background: var(--background-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.nuevaMesaInput {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-small);
+  margin-bottom: 0.625rem;
+}
+
+.nuevaMesaInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.nuevaMesaAcciones {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btnCrearMesa {
+  flex: 1;
+  padding: 0.5rem;
+  background: var(--primary-color);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  font-size: var(--font-xs);
+}
+
+.btnCancelarMesa {
+  flex: 1;
+  padding: 0.5rem;
+  background: var(--background-light);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  font-size: var(--font-xs);
+}
+
+.mesasLista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.sinMesas {
+  text-align: center;
+  padding: 2.5rem 1.25rem;
+  color: var(--text-secondary);
+}
+
+.sinMesasIcono {
+  font-size: var(--font-h3);
+  margin-bottom: 0.75rem;
+  color: var(--border-color);
+}
+
+.mesaCard {
+  background: var(--background-light);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mesaCard:hover {
+  border-color: var(--primary-color);
+  transform: translateX(4px);
+}
+
+.mesaCard.active {
+  border-color: var(--primary-color);
+  background: rgba(0, 218, 255, 0.1);
+}
+
+.mesaHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.mesaTitulo {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: var(--font-small);
+}
+
+.mesaIcono {
+  color: var(--warning-color);
+}
+
+.mesaAcciones {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.btnPagarMesa,
+.btnEliminarMesa {
+  background: none;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: var(--font-xs);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.btnPagarMesa {
+  color: var(--success-color);
+}
+
+.btnPagarMesa:hover:not(:disabled) {
+  background: rgba(0, 229, 160, 0.1);
+}
+
+.btnPagarMesa:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnEliminarMesa {
+  color: var(--danger-color);
+}
+
+.btnEliminarMesa:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.mesaCliente {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0;
+  border-top: 1px dashed var(--border-color);
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.mesaItems {
+  margin: 0.5rem 0;
+}
+
+.mesaItemResumen {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  padding: 0.25rem 0;
+}
+
+.mesaItemMas {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 0.25rem 0;
+}
+
+.mesaSinItems {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.mesaTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-color);
+  font-size: var(--font-xs);
+}
+
+.mesaTotal strong {
+  color: var(--primary-color);
+  font-size: var(--font-subtitle-md);
+}
+
+/* Panel productos mesa */
+.mesaProductosHeader {
+  margin-bottom: 1rem;
+}
+
+.mesaProductosHeader h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.mesaBusquedaProducto {
+  margin-bottom: 1rem;
+}
+
+.mesaCantidadControles {
+  margin-bottom: 0.75rem;
+}
+
+.mesaCantidadControles label {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  margin-right: 0.5rem;
+}
+
+.btnAgregarMesa {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--success-color);
+  color: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  font-size: var(--font-small);
+}
+
+.btnAgregarMesa:hover:not(:disabled) {
+  background: #00cc8a;
+}
+
+.btnAgregarMesa:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mesaItemsDetalle {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1rem;
+}
+
+.mesaItemsDetalle h5 {
+  font-size: var(--font-small);
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.sinItemsMesa {
+  text-align: center;
+  padding: 2.5rem;
+  color: var(--text-secondary);
+}
+
+.mesaItemsLista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.mesaItemDetalle {
+  background: var(--background-light);
+  border-radius: var(--radius-md);
+  padding: 0.625rem;
+  border: 1px solid var(--border-color);
+}
+
+.mesaItemInfo {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.mesaItemNombre {
+  font-weight: 600;
+  font-size: var(--font-small);
+  color: var(--text-primary);
+}
+
+.mesaItemPrecio {
+  font-size: var(--font-xs);
+  color: var(--primary-color);
+}
+
+.mesaItemControles {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mesaItemSubtotal {
+  font-weight: 600;
+  font-size: var(--font-xs);
+  color: var(--text-primary);
+}
+
+.btnRemoverItemMesa {
+  background: none;
+  border: none;
+  color: var(--danger-color);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.btnRemoverItemMesa:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.pasarFacturaContainer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--border-color);
+}
+
+.btnPasarFactura {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--primary-color);
+  color: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-subtitle-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.btnPasarFactura:hover:not(:disabled) {
+  background: var(--primary-light);
+  transform: translateY(-2px);
+}
+
+.btnPasarFactura:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sinMesaSeleccionada {
+  text-align: center;
+  padding: 3.75rem 1.25rem;
+  color: var(--text-secondary);
+}
+
+.sinMesaIcono {
+  font-size: var(--font-h2);
+  margin-bottom: 1rem;
+  color: var(--border-color);
+}
+
+/* Buscador de cliente en mesa */
+.mesaClienteSelector {
+  background: var(--background-light);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+}
+
+.mesaClienteLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.mesaClienteInputGroup {
+  margin-bottom: 0.5rem;
+}
+
+.mesaClienteInput {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-small);
+  transition: all 0.2s;
+}
+
+.mesaClienteInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.mesaBuscarCliente {
+  position: relative;
+  margin-top: 0.5rem;
+}
+
+.mesaBuscarInput {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  font-size: var(--font-xs);
+  background: var(--background-white);
+}
+
+.sugerenciasClienteMesa {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--background-white);
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  box-shadow: var(--shadow-md);
+  z-index: 100;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.sugerenciaClienteMesa {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--background-light);
+}
+
+.sugerenciaClienteMesa:hover {
+  background: rgba(0, 218, 255, 0.1);
+}
+
+.sugerenciaContacto {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+.mesaClienteDetalle {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--border-color);
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+.mesaClienteDetalle small {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.buscadorClienteMesa {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
+.buscadorLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  margin-bottom: 0.375rem;
+  font-weight: 500;
+}
+
+.buscadorInput {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-small);
+  transition: all 0.2s;
+}
+
+.buscadorInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.clienteSeleccionado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 229, 160, 0.1);
+  border: 1px solid var(--success-color);
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
+  font-size: var(--font-xs);
+  color: var(--success-color);
+}
+
+.btnQuitarCliente {
+  background: none;
+  border: none;
+  color: var(--danger-color);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.btnQuitarCliente:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* ============================================ */
+/* HISTORIAL - TABLA RESPONSIVE CORREGIDA */
+/* ============================================ */
+
+.historialSection {
+  background: var(--background-white);
+  border-radius: var(--radius-lg);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.historialHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.historialHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin: 0;
+}
+
+.filtrosHistorial {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filtroGrupo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-width: 180px;
+}
+
+.filtroGrupo label {
+  font-size: var(--font-small);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.filtroInput,
+.filtroSelect {
+  padding: 0.625rem 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-small);
+  color: var(--text-primary);
+  background: var(--background-white);
+}
+
+.tablaFacturasContainer {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.tablaFacturas {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.tablaFacturas th {
+  padding: 1rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: var(--font-small);
+  border-bottom: 2px solid var(--border-color);
+}
+
+/* ANCHOS DE COLUMNA PARA ESCRITORIO */
+.tablaFacturas th:nth-child(1) { width: 12%; }  /* Número */
+.tablaFacturas th:nth-child(2) { width: 12%; }  /* Fecha */
+.tablaFacturas th:nth-child(3) { width: 18%; }  /* Cliente */
+.tablaFacturas th:nth-child(4) { width: 8%; }   /* Items */
+.tablaFacturas th:nth-child(5) { width: 12%; }  /* Total */
+.tablaFacturas th:nth-child(6) { width: 12%; }  /* Pago */
+.tablaFacturas th:nth-child(7) { width: 10%; }  /* Estado */
+.tablaFacturas th:nth-child(8) { width: 8%; }   /* Puntos */
+.tablaFacturas th:nth-child(9) { width: 8%; }   /* Acciones */
+
+.filaFactura {
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.filaFactura:hover {
+  background: var(--background-light);
+}
+
+.tablaFacturas td {
+  padding: 0.75rem;
+  color: var(--text-secondary);
+  font-size: var(--font-small);
+}
+
+.celdaNumero {
+  font-family: 'SF Mono', monospace;
+  color: var(--primary-color);
+}
+
+.metodoPagoBadge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: white;
+  text-transform: capitalize;
+}
+
+.metodoPagoBadge.efectivo {
+  background: var(--success-color);
+}
+
+.metodoPagoBadge.transferencia {
+  background: #8b5cf6;
+}
+
+.estadoBadge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: var(--font-xs);
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.estadoBadge.pagada {
+  background: rgba(0, 229, 160, 0.1);
+  color: var(--success-color);
+}
+
+.sinFacturas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.sinFacturasIcono {
+  font-size: var(--font-h3);
+  margin-bottom: 1rem;
+  color: var(--border-color);
+}
+
+.resumenHistorial {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  background: var(--background-light);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.resumenItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 150px;
+}
+
+.resumenItem span {
+  font-size: var(--font-small);
+  color: var(--text-secondary);
+}
+
+.resumenItem strong {
+  font-size: var(--font-h3);
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* ============================================ */
+/* RESPONSIVE - SOLO 4 COLUMNAS EN MÓVIL */
+/* ============================================ */
+
+@media (max-width: 768px) {
+  /* Ajustes generales */
+  .facturaGridSinResumen {
+    grid-template-columns: 1fr;
+  }
+  
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+  
+  .busquedaRapidaInputGroup {
+    grid-template-columns: 1fr;
+  }
+  
+  .comandasGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .metodosPago {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  /* ===== TABLA HISTORIAL - SOLO 4 COLUMNAS ===== */
+  .tablaFacturasContainer {
+    overflow-x: visible;
+    margin: 0 -15px;
+    padding: 0 15px;
+    border: none;
+  }
+  
+  .tablaFacturas {
+    min-width: unset;
+    width: 100%;
+  }
+  
+  /* Ocultar: Número(1), Items(4), Total(5), Pago(6), Estado(7) */
+  .tablaFacturas th:nth-child(1),
+  .tablaFacturas td:nth-child(1),
+  .tablaFacturas th:nth-child(4),
+  .tablaFacturas td:nth-child(4),
+  .tablaFacturas th:nth-child(5),
+  .tablaFacturas td:nth-child(5),
+  .tablaFacturas th:nth-child(6),
+  .tablaFacturas td:nth-child(6),
+  .tablaFacturas th:nth-child(7),
+  .tablaFacturas td:nth-child(7) {
+    display: none;
+  }
+  
+  /* Mostrar solo: Fecha(2), Cliente(3), Puntos(8), Acciones(9) */
+  .tablaFacturas th:nth-child(2),
+  .tablaFacturas td:nth-child(2) { 
+    width: 25%; 
+    min-width: 80px;
+  }
+  
+  .tablaFacturas th:nth-child(3),
+  .tablaFacturas td:nth-child(3) { 
+    width: 35%; 
+    min-width: 120px;
+  }
+  
+  .tablaFacturas th:nth-child(8),
+  .tablaFacturas td:nth-child(8) { 
+    width: 20%; 
+    min-width: 60px;
+  }
+  
+  .tablaFacturas th:nth-child(9),
+  .tablaFacturas td:nth-child(9) { 
+    width: 20%; 
+    min-width: 60px;
+  }
+  
+  /* Ajustar padding y fuentes */
+  .tablaFacturas th,
+  .tablaFacturas td {
+    padding: 8px 6px;
+    font-size: var(--font-xs);
+  }
+  
+  .tablaFacturas th {
+    font-size: var(--font-xs);
+    padding: 6px 4px;
+  }
+  
+  /* Resumen historial en móvil */
+  .resumenHistorial {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .resumenItem {
+    flex-direction: row;
+    justify-content: space-between;
+    min-width: unset;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .resumenItem:last-child {
+    border-bottom: none;
+  }
+  
+  .resumenItem span {
+    font-size: var(--font-xs);
+  }
+  
+  .resumenItem strong {
+    font-size: var(--font-subtitle-md);
+  }
+}
+
+@media (max-width: 480px) {
+  /* Ajustes adicionales para móvil pequeño */
+  .tablaFacturas th:nth-child(2),
+  .tablaFacturas td:nth-child(2) { 
+    width: 20%; 
+    min-width: 60px;
+  }
+  
+  .tablaFacturas th:nth-child(3),
+  .tablaFacturas td:nth-child(3) { 
+    width: 35%; 
+    min-width: 90px;
+  }
+  
+  .tablaFacturas th:nth-child(8),
+  .tablaFacturas td:nth-child(8) { 
+    width: 20%; 
+    min-width: 50px;
+  }
+  
+  .tablaFacturas th:nth-child(9),
+  .tablaFacturas td:nth-child(9) { 
+    width: 25%; 
+    min-width: 50px;
+  }
+  
+  .tablaFacturas th,
+  .tablaFacturas td {
+    padding: 4px 3px;
+    font-size: var(--font-xs);
+  }
+  
+  .btnAccion {
+    padding: 4px 6px;
+    font-size: var(--font-xs);
+  }
+  
+  /* Métodos de pago en 1 columna en móvil muy pequeño */
+  .metodosPago {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Reducir tamaño del input de pago */
+  .pagoInput {
+    font-size: var(--font-subtitle-md);
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+  }
+  
+  .pagoSimbolo {
+    font-size: var(--font-small);
+    left: 0.5rem;
+  }
+}
+
+/* Reportes */
+.reportesSection {
+  background: var(--background-white);
+  border-radius: var(--radius-lg);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.reportesSection h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin: 0 0 1.5rem 0;
+}
+
+.reportesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.reporteCard {
+  background: var(--background-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  transition: all 0.2s;
+}
+
+.reporteCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.reporteCard h4 {
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.tablaProductosContainer {
+  overflow-x: auto;
+}
+
+.tablaProductos {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tablaProductos th {
+  text-align: left;
+  padding: 0.5rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+  font-size: var(--font-xs);
+}
+
+.tablaProductos td {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: var(--font-xs);
+}
+
+.reportesAcciones {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--border-color);
+}
+
+.btnReporte {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--primary-color);
+  color: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-small);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnReporte:hover {
+  background: var(--primary-light);
+}
+
+/* Modal styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: var(--background-white);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--background-light);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: var(--font-subtitle-lg);
+}
+
+.modalClose {
+  background: none;
+  border: none;
+  font-size: var(--font-subtitle-lg);
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+
+.modalClose:hover {
+  color: var(--danger-color);
+}
+
+.modalBody {
+  padding: 1.5rem;
+}
+
+.facturaDetalle {
+  background: var(--background-light);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+}
+
+.detalleRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: var(--font-xs);
+}
+
+.productosTable {
+  margin-bottom: 1.5rem;
+}
+
+.productosTable h4 {
+  margin-bottom: 0.75rem;
+}
+
+.tablaProductosModal {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-xs);
+}
+
+.tablaProductosModal th,
+.tablaProductosModal td {
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tablaProductosModal th {
+  background: var(--background-light);
+  font-weight: 600;
+}
+
+.totalesModal {
+  background: var(--background-light);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+}
+
+.totalLinea {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: var(--font-xs);
+}
+
+.totalFinalModal {
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: var(--font-subtitle-md);
+  font-weight: 700;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--background-light);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.btnEnviarEmail {
+  background: var(--primary-color);
+  color: var(--text-primary);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.2s;
+  font-size: var(--font-xs);
+}
+
+.btnEnviarEmail:hover:not(:disabled) {
+  background: var(--primary-light);
+}
+
+.btnEnviarEmail:disabled {
+  background: var(--text-secondary);
+  cursor: not-allowed;
+}
+
+.btnCerrarModal {
+  background: var(--text-secondary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: var(--font-xs);
+}
+
+.btnCerrarModal:hover {
+  background: #4b5563;
+}
+
+/* Cargando */
+.cargandoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+  color: var(--text-primary);
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Reducción de movimientos para accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visible para navegación por teclado */
+:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Scroll suave */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ============================================ */
+/* MODAL DE PROCESAMIENTO CON BARRA DE PROGRESO */
+/* ============================================ */
+.modalProgresoOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modalProgresoContent {
+  background: white;
+  border-radius: 16px;
+  padding: 0;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+  overflow: hidden;
+}
+
+.modalProgresoHeader {
+  padding: 24px 28px 16px 28px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modalProgresoHeader h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modalProgresoBody {
+  padding: 24px 28px 20px 28px;
+}
+
+.mensajeProgreso {
+  font-size: 1rem;
+  color: #4b5563;
+  margin: 0 0 16px 0;
+  text-align: center;
+  min-height: 28px;
+}
+
+.barraProgresoContainer {
+  width: 100%;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 8px 0 12px 0;
+}
+
+.barraProgreso {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #10b981);
+  border-radius: 99px;
+  transition: width 0.4s ease-in-out;
+  width: 0%;
+}
+
+.barraCompletada {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+.barraError {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.porcentajeProgreso {
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin: 4px 0 16px 0;
+}
+
+/* Iconos del modal */
+.iconSpinner {
+  animation: spin 1s linear infinite;
+  color: #3b82f6;
+  font-size: 1.5rem;
+}
+
+.iconSuccess {
+  color: #10b981;
+  font-size: 1.5rem;
+}
+
+.iconError {
+  color: #ef4444;
+  font-size: 1.5rem;
+}
+
+/* Resultado exitoso */
+.resultadoExitoso {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-top: 12px;
+}
+
+.resultadoDetalle {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 0.95rem;
+  color: #1f2937;
+}
+
+.resultadoDetalle span {
+  color: #6b7280;
+}
+
+.resultadoDetalle strong {
+  color: #065f46;
+}
+
+/* Resultado error */
+.resultadoError {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-top: 12px;
+  text-align: center;
+}
+
+.resultadoError p {
+  color: #991b1b;
+  margin: 0 0 12px 0;
+  font-weight: 500;
+}
+
+.btnCerrarError {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnCerrarError:hover {
+  background: #dc2626;
+}
+
+/* Footer del modal */
+.modalProgresoFooter {
+  padding: 16px 28px 24px 28px;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.btnCerrarProgreso {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 10px 40px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnCerrarProgreso:hover {
+  background: #059669;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .modalProgresoContent {
+    max-width: 95%;
+    margin: 0 10px;
+  }
+  
+  .modalProgresoHeader h3 {
+    font-size: 1rem;
+  }
+  
+  .modalProgresoBody {
+    padding: 16px 18px;
+  }
+  
+  .resultadoDetalle {
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+}
+
+/* ============================================ */
+/* 📧 MODAL PARA ENVÍO DE EMAIL */
+/* ============================================ */
+
+.modalEmailOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease;
+}
+
+.modalEmailContent {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+.modalEmailHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f8fafc;
+}
+
+.modalEmailHeader h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modalEmailHeader h3 svg {
+  color: #3b82f6;
+}
+
+.modalEmailClose {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.modalEmailClose:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+.modalEmailClose:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modalEmailBody {
+  padding: 24px;
+}
+
+.modalEmailInfo {
+  background: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.modalEmailInfo p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #475569;
+}
+
+.modalEmailInfo strong {
+  color: #1e293b;
+}
+
+.modalEmailFormGroup {
+  margin-bottom: 20px;
+}
+
+.modalEmailFormGroup label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.modalEmailInput {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.modalEmailInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.modalEmailInput:disabled {
+  background: #f1f5f9;
+  cursor: not-allowed;
+}
+
+/* Barra de progreso email */
+.modalEmailProgressContainer {
+  margin-top: 16px;
+}
+
+.modalEmailProgressBar {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.modalEmailProgressFill {
+  height: 100%;
+  background: #3b82f6;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.modalEmailProgressFill.progressSuccess {
+  background: #22c55e;
+}
+
+.modalEmailProgressFill.progressError {
+  background: #ef4444;
+}
+
+.modalEmailProgressText {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.modalEmailMensaje {
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.modalEmailMensaje.mensajeSuccess {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.modalEmailMensaje.mensajeError {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.modalEmailFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid #e5e7eb;
+  background: #f8fafc;
+}
+
+.btnModalEmailCancelar {
+  padding: 8px 20px;
+  border: 2px solid #e2e8f0;
+  background: white;
+  color: #475569;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnModalEmailCancelar:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.btnModalEmailCancelar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnModalEmailEnviar {
+  padding: 8px 24px;
+  border: none;
+  background: #3b82f6;
+  color: white;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btnModalEmailEnviar:hover:not(:disabled) {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btnModalEmailEnviar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btnModalEmailEnviar:disabled .spinnerIcon {
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive email modal */
+@media (max-width: 640px) {
+  .modalEmailContent {
+    width: 95%;
+    max-width: 95%;
+  }
+  
+  .modalEmailHeader h3 {
+    font-size: 16px;
+  }
+  
+  .modalEmailBody {
+    padding: 16px;
+  }
+  
+  .modalEmailFooter {
+    flex-direction: column-reverse;
+    padding: 12px 16px;
+  }
+  
+  .btnModalEmailEnviar,
+  .btnModalEmailCancelar {
+    width: 100%;
+    justify-content: center;
+  }
+}

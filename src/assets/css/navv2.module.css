@@ -1,0 +1,151 @@
+/* navv.module.css - Estilos para NavAdmin con tu paleta de colores */
+/* Variables directamente en el contenedor para React */
+
+/* Contenedor principal */
+.navAdminContainer {
+  /* Colores */
+  --fondo-principal: #0A0C10;
+  --fondo-secundario: #14171C;
+  --primario: #00DAFF;
+  --primario-hover: #0088CC;
+  --exito: #00E5A0;
+  --alerta: #FF8C42;
+  --texto-principal: #E8EDF2;
+  --texto-secundario: #889280;
+  --bordes: #1F2937;
+  --error: #FF3B5C;
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--fondo-secundario);
+  color: var(--texto-principal);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid var(--primario);
+}
+
+/* Contenedor de enlaces */
+.navAdminLinks {
+  display: flex;
+  gap: 1.5rem;
+}
+
+/* Enlaces normales - ESTILO BASE */
+.navAdminItem {
+  color: var(--texto-principal);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+/* Efecto hover */
+.navAdminItem:hover {
+  background-color: rgba(0, 218, 255, 0.1);
+  color: var(--primario);
+  transform: translateY(-2px);
+  border-color: var(--primario);
+}
+
+/* ESTADO ACTIVO - usando la clase .active de CSS Modules */
+.active {
+  background-color: rgba(0, 218, 255, 0.15) !important;
+  color: var(--primario) !important;
+  font-weight: 600 !important;
+  border: 1px solid var(--primario) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0, 218, 255, 0.2) !important;
+  text-decoration: none !important;
+}
+
+/* IMPORTANTE: Sobrescribir cualquier estilo por defecto de React Router */
+.navAdminLinks a {
+  border-bottom: none !important;
+  text-decoration: none !important;
+}
+
+/* Botón de logout */
+.navAdminLogout {
+  background: rgba(255, 59, 92, 0.9);
+  color: var(--texto-principal);
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.navAdminLogout:hover {
+  background: var(--error);
+  transform: scale(1.05);
+  box-shadow: 0 3px 8px rgba(255, 59, 92, 0.3);
+}
+
+/* Título/bienvenida opcional */
+.navAdminTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primario);
+}
+
+.navAdminUser {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.userName {
+  color: var(--texto-secundario);
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navAdminContainer {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .navAdminLinks {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .navAdminItem {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .navAdminLogout {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navAdminContainer {
+    padding: 0.8rem;
+  }
+
+  .navAdminLinks {
+    gap: 0.5rem;
+  }
+
+  .navAdminItem {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .navAdminLogout {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+  }
+}

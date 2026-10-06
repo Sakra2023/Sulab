@@ -1,0 +1,1784 @@
+/* Reset y base - Variables directamente en body para React */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  /* Colores */
+  --fondo-principal: #0A0C10;
+  --fondo-secundario: #14171C;
+  --primario: #00DAFF;
+  --primario-hover: #0088CC;
+  --exito: #00E5A0;
+  --alerta: #FF8C42;
+  --texto-principal: #E8EDF2;
+  --texto-secundario: #8B95A5; /* 🔧 CORREGIDO: gris azulado con mejor contraste (antes #889280 verde oliva) */
+  --bordes: #1F2937;
+  --error: #FF3B5C;
+  --oro: #FFD700;
+  --plata: #C0C0C0;
+  --bronce: #CD7F32;
+  
+  /* Tipografía responsive */
+  --font-h1: clamp(2rem, 8vw, 4rem);
+  --font-h2: clamp(1.5rem, 4vw, 2.5rem);
+  --font-h3: clamp(1.25rem, 3vw, 1.8rem);
+  --font-subtitle-lg: clamp(1rem, 2.5vw, 1.2rem);
+  --font-subtitle-md: clamp(0.9rem, 2vw, 1.1rem);
+  --font-body: clamp(0.90rem, 1.5vw, 1rem);
+  --font-small: clamp(0.75rem, 1.2vw, 0.85rem);
+  --font-xs: clamp(0.7rem, 1vw, 0.75rem);
+  --font-xxs: clamp(0.65rem, 0.9vw, 0.7rem);
+  
+  /* Sombras */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 5px 20px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 20px rgba(0, 218, 255, 0.3);
+  --shadow-glow-hover: 0 0 30px rgba(0, 218, 255, 0.5);
+  
+  /* Transiciones */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* Bordes */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 50%;
+  
+  background-color: var(--fondo-principal);
+  color: var(--texto-principal);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  font-size: var(--font-body);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* ============================================= */
+/* ESTILOS BASE CON VARIABLES APLICADAS */
+/* ============================================= */
+
+h1, .titu, .h1 {
+  font-size: clamp(3rem, 8vw, 4rem);
+}
+
+h2, .h2, .comoFuncionaTitulo, .emprendimientosTitulo, .rankingTitulo, .carruselTitulo, .sectionTitle {
+  font-size: var(--font-h2);
+}
+
+h3, .h3, .pasoTitulo, .emprendimientoNombreHorizontal, .premioNombre, .ganadorNombre, .footerLogo {
+  font-size: var(--font-h3);
+}
+
+p, .parra, .pasoDescripcion, .descripcion {
+  font-size: var(--font-body);
+}
+
+small, .small, .detalleTextoHorizontal, .rankingNota, .footerDesc, .footerCol li, .appBtn {
+  font-size: var(--font-small);
+}
+
+.containerPrincipal {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ============================================= */
+
+
+/* Sección principal */
+.conta1 {
+  width: 100%;
+  max-width: 1400px;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  padding: 4rem 2rem;
+  margin: 0 auto;
+}
+
+.box1 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.box11 {
+  width: 100%;
+}
+
+.box12 {
+  width: 100%;
+}
+
+.titu {
+  color: var(--primario);
+  font-weight: 800;
+  line-height: 1.2;
+  text-shadow: 0 2px 10px rgba(0, 218, 255, 0.3);
+  margin-bottom: 0;
+}
+
+.parra {
+  color: var(--texto-secundario);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.box2 {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================= */
+/* ANIMACIÓN FLOTANTE - SOLO PARA LA IMAGEN */
+/* ============================================= */
+@keyframes wave {
+  0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+  25% { transform: translate(10px, -5px) rotate(2deg); }
+  50% { transform: translate(0px, -10px) rotate(0deg); }
+  75% { transform: translate(-10px, -5px) rotate(-2deg); }
+}
+
+/* ============================================= */
+/* CONTENEDOR CIRCULAR - FIJO CON DIFUMINADO ALREDEDOR */
+/* ============================================= */
+.imagenPlaceholder {
+  width: 100%;
+  max-width: 650px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, var(--primario), var(--primario-hover));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 60px rgba(0, 218, 255, 0.4),
+              inset 0 0 40px rgba(0, 218, 255, 0.1);
+  transition: box-shadow var(--transition-normal);
+}
+
+.imagenPlaceholder:hover {
+  box-shadow: 0 0 80px rgba(0, 218, 255, 0.6),
+              inset 0 0 50px rgba(0, 218, 255, 0.2);
+}
+
+.imagenPlaceholder img {
+  width: 85%;
+  height: 85%;
+  object-fit: cover;
+  border-radius: 50%;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+  animation: wave 4s ease-in-out infinite;
+  will-change: transform;
+  transition: transform var(--transition-normal);
+  display: block;
+}
+
+.imagenPlaceholder:hover img {
+  animation-play-state: paused;
+  transform: scale(1.05);
+}
+
+.imagenTexto {
+  font-size: var(--font-h1);
+  font-weight: bold;
+  color: var(--fondo-principal);
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Sección Cómo funciona */
+.comoFuncionaSection {
+  max-width: 1400px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 4rem 2rem;
+  background: var(--fondo-secundario);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--bordes);
+}
+
+.comoFuncionaHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.comoFuncionaTitulo {
+  color: var(--primario);
+  font-weight: 800;
+  margin-bottom: 1rem;
+  text-shadow: var(--shadow-glow);
+}
+
+.comoFuncionaSubtitulo {
+  font-size: var(--font-subtitle-lg);
+  color: var(--texto-secundario);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.comoFuncionaGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.pasoCard {
+  background: rgba(10, 12, 16, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  border: 1px solid var(--bordes);
+  transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.pasoCard:hover {
+  transform: translateY(-5px);
+  border-color: var(--primario);
+  box-shadow: var(--shadow-glow);
+}
+
+.pasoNumero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--primario);
+  color: var(--fondo-principal);
+  border-radius: var(--radius-full);
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.pasoIcono {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.pasoTitulo {
+  color: var(--texto-principal);
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.pasoDescripcion {
+  color: var(--texto-secundario);
+  line-height: 1.5;
+}
+
+/* ============================================= */
+/* SECCIÓN EMPRENDIMIENTOS - ESTILOS MEJORADOS */
+/* ============================================= */
+
+.emprendimientosSection {
+  max-width: 1400px;
+  width: 100%;
+  padding: 4rem 2rem;
+}
+
+.emprendimientosHeader {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.emprendimientosTitulo {
+  color: var(--primario);
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  text-shadow: var(--shadow-glow);
+}
+
+.emprendimientosSubtitulo {
+  font-size: var(--font-subtitle-md);
+  color: var(--texto-secundario);
+}
+
+/* Carrusel Horizontal - Desktop (3 tarjetas) */
+.carruselHorizontalContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0 auto;
+  position: relative;
+}
+
+.carruselHorizontalWrapper {
+  flex: 1;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+.carruselHorizontalTrack {
+  display: flex;
+  transition: transform var(--transition-slow);
+}
+
+.grupoEmprendimientos {
+  flex: 0 0 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.tripleCardContainer {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Tarjeta de emprendimiento - Versión mejorada */
+.emprendimientoCardHorizontal {
+  flex: 1;
+  min-width: 260px;
+  max-width: 400px;
+  background: var(--fondo-secundario);
+  border-radius: var(--radius-xl);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid var(--bordes);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.emprendimientoCardHorizontal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 218, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.emprendimientoCardHorizontal:hover::before {
+  left: 100%;
+}
+
+.emprendimientoCardHorizontal:hover {
+  transform: translateY(-5px);
+  border-color: var(--primario);
+  box-shadow: var(--shadow-glow);
+}
+
+/* ============================================= */
+/* ESTILOS MEJORADOS PARA LOGO DE EMPRENDIMIENTOS */
+/* ============================================= */
+
+.emprendimientoIconoHorizontal {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, rgba(0, 218, 255, 0.15), rgba(0, 218, 255, 0.05));
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(0, 218, 255, 0.2);
+  transition: all var(--transition-normal);
+  overflow: hidden;
+  position: relative;
+}
+
+.emprendimientoCardHorizontal:hover .emprendimientoIconoHorizontal {
+  border-color: var(--primario);
+  box-shadow: 0 0 20px rgba(0, 218, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.emprendimientoIconoHorizontal::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 218, 255, 0.1), transparent 70%);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+}
+
+.emprendimientoCardHorizontal:hover .emprendimientoIconoHorizontal::after {
+  opacity: 1;
+}
+
+.emprendimientoImagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.emprendimientoCardHorizontal:hover .emprendimientoImagen {
+  transform: scale(1.1);
+}
+
+.iconoHorizontal {
+  font-size: 2.8rem;
+  transition: transform var(--transition-normal);
+}
+
+.emprendimientoCardHorizontal:hover .iconoHorizontal {
+  transform: scale(1.1);
+}
+
+.emprendimientoInfoHorizontal {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.emprendimientoNombreHorizontal {
+  color: var(--texto-principal);
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.emprendimientoCategoriaHorizontal {
+  display: inline-block;
+  background: rgba(0, 218, 255, 0.15);
+  color: var(--primario);
+  padding: 0.25rem 0.8rem;
+  border-radius: 20px;
+  font-size: var(--font-xs);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.emprendimientoDetallesHorizontal {
+  width: 100%;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.detalleHorizontal {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+  padding: 0.4rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+  text-align: left;
+  width: 100%;
+}
+
+.detalleHorizontal:hover {
+  background: rgba(0, 218, 255, 0.05);
+}
+
+.detalleIconoHorizontal {
+  font-size: 1rem;
+  flex-shrink: 0;
+  min-width: 22px;
+  text-align: center;
+}
+
+.detalleTextoHorizontal {
+  color: var(--texto-secundario);
+  line-height: 1.35;
+  word-break: break-word;
+  text-align: left;
+  flex: 1;
+}
+
+.btnVerEmprendimiento {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 218, 255, 0.1);
+  border: 1px solid var(--primario);
+  border-radius: var(--radius-md);
+  color: var(--primario);
+  font-weight: 600;
+  font-size: var(--font-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.btnVerEmprendimiento:hover {
+  background: var(--primario);
+  color: var(--fondo-principal);
+  transform: scale(1.02);
+}
+
+.carruselHorizontalBtn {
+  width: 44px;
+  height: 44px;
+  background: rgba(0, 218, 255, 0.15);
+  border: 1px solid var(--primario);
+  color: var(--primario);
+  border-radius: var(--radius-full);
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.carruselHorizontalBtn:hover {
+  background: var(--primario);
+  color: var(--fondo-principal);
+  transform: scale(1.05);
+}
+
+/* ============================================= */
+/* RANKING / TOP LABPOINTS - TABLA PROFESIONAL MEJORADA */
+/* ============================================= */
+
+.rankingSection {
+  max-width: 1400px;
+  width: 100%;
+  padding: 4rem 2rem;
+}
+
+.rankingHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.rankingTitulo {
+  color: var(--primario);
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  text-shadow: var(--shadow-glow);
+}
+
+.rankingSubtitulo {
+  font-size: var(--font-subtitle-md);
+  color: var(--texto-secundario);
+}
+
+.rankingContainer {
+  background: var(--fondo-secundario);
+  border-radius: var(--radius-xl);
+  padding: 0;
+  border: 1px solid var(--bordes);
+  overflow-x: auto;
+  box-shadow: var(--shadow-md);
+  transition: box-shadow var(--transition-normal);
+}
+
+.rankingContainer:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.rankingTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.rankingTable thead tr {
+  background: linear-gradient(135deg, rgba(0, 218, 255, 0.1), rgba(0, 218, 255, 0.03));
+  border-bottom: 2px solid var(--primario);
+}
+
+.rankingTable th {
+  text-align: left;
+  padding: 1rem 1.25rem;
+  font-size: var(--font-small);
+  color: var(--primario);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: transparent;
+}
+
+.rankingTable th:first-child {
+  border-top-left-radius: var(--radius-xl);
+  padding-left: 1.5rem;
+}
+
+.rankingTable th:last-child {
+  border-top-right-radius: var(--radius-xl);
+  padding-right: 1.5rem;
+}
+
+.rankingTable tbody tr {
+  transition: all var(--transition-fast);
+  border-bottom: 1px solid var(--bordes);
+  cursor: pointer;
+}
+
+.rankingTable tbody tr:hover {
+  background: linear-gradient(90deg, rgba(0, 218, 255, 0.06), rgba(0, 218, 255, 0.02));
+}
+
+.rankingTable td {
+  padding: 0.875rem 1.25rem;
+  vertical-align: middle;
+}
+
+.posicion {
+  width: 80px;
+  text-align: center;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-full);
+  font-weight: 800;
+  font-size: 1.1rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+
+.rankingTable tbody tr:hover .badge {
+  transform: scale(1.08);
+}
+
+.rankingTable tbody tr:first-child .badge {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #1a1a2e;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+}
+
+.rankingTable tbody tr:nth-child(2) .badge {
+  background: linear-gradient(135deg, #E0E0E0, #A0A0A0);
+  color: #1a1a2e;
+  box-shadow: 0 0 10px rgba(192, 192, 192, 0.4);
+}
+
+.rankingTable tbody tr:nth-child(3) .badge {
+  background: linear-gradient(135deg, #CD7F32, #8B5A2B);
+  color: #1a1a2e;
+  box-shadow: 0 0 10px rgba(205, 127, 50, 0.4);
+}
+
+.rankingTable tbody tr:nth-child(n+4) .badge {
+  background: rgba(0, 218, 255, 0.12);
+  color: var(--primario);
+  border: 1px solid rgba(0, 218, 255, 0.3);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.nombreUsuario {
+  min-width: 200px;
+}
+
+.usuarioInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.usuarioFoto {
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-fast);
+  overflow: hidden;
+}
+
+.rankingTable tbody tr:hover .usuarioFoto {
+  transform: scale(1.05);
+}
+
+.usuarioNombre {
+  font-weight: 600;
+  color: var(--texto-principal);
+  transition: color var(--transition-fast);
+}
+
+.rankingTable tbody tr:hover .usuarioNombre {
+  color: var(--primario);
+}
+
+.puntos {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--exito);
+}
+
+.puntos small {
+  font-size: var(--font-xs);
+  font-weight: 400;
+  color: var(--texto-secundario);
+  margin-left: 0.25rem;
+}
+
+.rankingTable td:last-child {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.nivel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  border-radius: 40px;
+  font-size: var(--font-small);
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+  transition: all var(--transition-fast);
+}
+
+.rankingTable tbody tr:hover .nivel {
+  transform: scale(1.02);
+}
+
+.nivel[data-level="diamante"],
+.rankingTable tbody tr:first-child .nivel {
+  background: linear-gradient(135deg, rgba(0, 229, 160, 0.2), rgba(0, 218, 255, 0.1));
+  color: var(--exito);
+  border: 1px solid rgba(0, 229, 160, 0.4);
+}
+
+.nivel[data-level="oro"],
+.rankingTable tbody tr:nth-child(2) .nivel {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.1));
+  color: #FFD700;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+}
+
+.nivel[data-level="plata"],
+.rankingTable tbody tr:nth-child(3) .nivel {
+  background: linear-gradient(135deg, rgba(192, 192, 192, 0.2), rgba(160, 160, 160, 0.1));
+  color: #E0E0E0;
+  border: 1px solid rgba(192, 192, 192, 0.4);
+}
+
+.nivel[data-level="bronce"] {
+  background: linear-gradient(135deg, rgba(205, 127, 50, 0.2), rgba(139, 69, 19, 0.1));
+  color: #CD7F32;
+  border: 1px solid rgba(205, 127, 50, 0.4);
+}
+
+.rankingFooter {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.rankingNota {
+  color: var(--texto-secundario);
+  background: rgba(0, 218, 255, 0.05);
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  border-radius: 30px;
+  border: 1px solid rgba(0, 218, 255, 0.15);
+  font-size: var(--font-xs);
+}
+
+/* ============================================= */
+/* PREMIOS DESTACADOS */
+/* ============================================= */
+
+.destacadosSection {
+  max-width: 1400px;
+  width: 100%;
+  padding: 4rem 2rem;
+}
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.sectionTitle {
+  color: var(--primario);
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.sectionSubtitle {
+  font-size: var(--font-subtitle-lg);
+  color: var(--texto-secundario);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.premiosGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.premioCard {
+  background: var(--fondo-secundario);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  border: 1px solid var(--bordes);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.premioCard:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-glow);
+  border-color: var(--primario);
+}
+
+.premioHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.premioIcon {
+  width: 60px;
+  height: 60px;
+  background: rgba(0, 218, 255, 0.1);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--primario);
+}
+
+.premioNombre {
+  color: var(--texto-principal);
+  font-weight: 600;
+}
+
+.premioCategoria {
+  font-size: var(--font-xs);
+  color: var(--texto-secundario);
+  background: rgba(136, 146, 128, 0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+}
+
+.premioDescripcion {
+  font-size: var(--font-small);
+  color: var(--texto-secundario);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.premioPuntos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--fondo-principal);
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+}
+
+.puntosLabel {
+  font-size: var(--font-small);
+  color: var(--texto-secundario);
+}
+
+.puntosValor {
+  font-size: var(--font-h3);
+  color: var(--exito);
+  font-weight: bold;
+}
+
+.premioAcciones {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btnCanjear,
+.btnDetalles {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.btnCanjear {
+  background: var(--primario);
+  color: var(--fondo-principal);
+  border: none;
+}
+
+.btnCanjear:hover {
+  background: var(--primario-hover);
+  transform: scale(1.02);
+}
+
+.btnDetalles {
+  background: rgba(0, 218, 255, 0.1);
+  color: var(--primario);
+  border: 1px solid var(--primario);
+}
+
+.btnDetalles:hover {
+  background: rgba(0, 218, 255, 0.2);
+}
+
+/* ============================================= */
+/* CARRUSEL GANADORES - ESTILOS MEJORADOS */
+/* ============================================= */
+
+.carruselSection {
+  max-width: 1400px;
+  width: 100%;
+  padding: 4rem 2rem;
+}
+
+.carruselTitulo {
+  color: var(--primario);
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  text-shadow: var(--shadow-glow);
+}
+
+.carruselSubtitulo {
+  font-size: var(--font-subtitle-md);
+  color: var(--texto-secundario);
+}
+
+.carruselContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.carruselCard {
+  display: flex;
+  background: var(--fondo-secundario);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  max-width: 900px;
+  width: 100%;
+  gap: 2rem;
+  border: 1px solid var(--bordes);
+  transition: transform var(--transition-normal), border-color var(--transition-normal);
+}
+
+.carruselCard:hover {
+  transform: translateY(-5px);
+  border-color: var(--primario);
+}
+
+.ganadorFoto {
+  flex-shrink: 0;
+}
+
+.fotoIcono {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, var(--exito), var(--primario));
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  box-shadow: var(--shadow-md);
+}
+
+.ganadorInfo {
+  flex: 1;
+}
+
+.ganadorNombre {
+  color: var(--texto-principal);
+  margin-bottom: 0.5rem;
+}
+
+.ganadorPosicion {
+  display: inline-block;
+  background: rgba(0, 218, 255, 0.15);
+  color: var(--primario);
+  padding: 0.25rem 1rem;
+  border-radius: 20px;
+  font-size: var(--font-small);
+}
+
+.ganadorDetalles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.detalleItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-md);
+}
+
+.detalleIcono {
+  font-size: 1.5rem;
+}
+
+.detalleTitulo {
+  font-size: var(--font-xs);
+  color: var(--texto-secundario);
+}
+
+.detalleValor {
+  font-size: var(--font-small);
+  color: var(--texto-principal);
+  font-weight: 500;
+}
+
+.nivelBadge {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  background: rgba(0, 229, 160, 0.1);
+  color: var(--exito);
+  border: 1px solid rgba(0, 229, 160, 0.3);
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: var(--font-small);
+}
+
+.carruselBtn {
+  width: 48px;
+  height: 48px;
+  background: rgba(0, 218, 255, 0.15);
+  border: 1px solid var(--primario);
+  color: var(--primario);
+  border-radius: var(--radius-full);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.carruselBtn:hover {
+  background: var(--primario);
+  color: var(--fondo-principal);
+  transform: scale(1.05);
+}
+
+.carruselControles,
+.carruselHorizontalControles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.controlBtn,
+.controlBtnHorizontal {
+  background: rgba(0, 218, 255, 0.15);
+  color: var(--primario);
+  border: 1px solid var(--primario);
+  padding: 0.5rem 1.5rem;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.controlBtn:hover,
+.controlBtnHorizontal:hover {
+  background: var(--primario);
+  color: var(--fondo-principal);
+}
+
+.indicadorHorizontal,
+.indicador {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.indicadorHorizontalActivo,
+.indicadorActivo {
+  background: var(--primario);
+  transform: scale(1.3);
+}
+
+.autoPlayInfo {
+  font-size: var(--font-xs);
+  color: var(--primario);
+  margin-left: 0.5rem;
+}
+
+.tiempoContainer {
+  margin-top: 1rem;
+  width: 100%;
+  height: 3px;
+  background: var(--bordes);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.tiempoBarra {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primario), var(--exito));
+  width: 100%;
+  transform-origin: left;
+  animation: tiempoRestante 5s linear infinite;
+}
+
+@keyframes tiempoRestante {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+/* ============================================= */
+/* FOOTER */
+/* ============================================= */
+
+.footer {
+  background: var(--fondo-secundario);
+  border-top: 1px solid var(--bordes);
+  padding: 3rem 2rem 1.5rem;
+  margin-top: 4rem;
+  width: 100%;
+}
+
+.footerContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.footerCol h3,
+.footerCol h4 {
+  color: var(--primario);
+  margin-bottom: 1rem;
+}
+
+.footerCol h4 {
+  font-weight: 600;
+}
+
+.footerLogo {
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primario), var(--exito));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+.footerDesc {
+  color: var(--texto-secundario);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+/* 🔧 CORREGIDO: socialLinks ahora alinea correctamente las imágenes */
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.socialLinks a {
+  display: inline-flex;          /* 🔧 CORREGIDO: alinea imagen dentro del enlace */
+  align-items: center;
+  justify-content: center;
+  color: var(--texto-secundario);
+  font-size: 1.5rem;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+  text-decoration: none;
+}
+
+.socialLinks a:hover {
+  color: var(--primario);
+  transform: translateY(-2px);
+}
+
+/* 🔧 NUEVO: tamaño específico para las imágenes de redes en el footer
+   (no afecta a .redes de las cards de emprendimientos) */
+.redesFooter {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  transition: transform var(--transition-fast);
+}
+
+.socialLinks a:hover .redesFooter {
+  transform: scale(1.15);
+}
+
+.footerCol ul {
+  list-style: none;
+}
+
+.footerCol li {
+  margin-bottom: 0.6rem;
+  color: var(--texto-secundario);
+}
+
+.footerCol a {
+  color: var(--texto-secundario);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footerCol a:hover {
+  color: var(--primario);
+}
+
+.appButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.appBtn {
+  background: rgba(0, 218, 255, 0.1);
+  border: 1px solid var(--primario);
+  color: var(--primario);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.appBtn:hover {
+  background: var(--primario);
+  color: var(--fondo-principal);
+  transform: scale(1.02);
+}
+
+.footerBottom {
+  text-align: center;
+  padding-top: 2rem;
+  margin-top: 2rem;
+  border-top: 1px solid var(--bordes);
+  color: var(--texto-secundario);
+}
+
+/* ============================================= */
+/* RESPONSIVE - TABLETS (max-width: 968px) */
+/* ============================================= */
+@media (max-width: 968px) {
+  .conta1 {
+    flex-direction: column;
+    text-align: center;
+    gap: 2rem;
+  }
+  
+  .carruselCard {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .ganadorFoto {
+    margin: 0 auto;
+  }
+}
+
+/* ============================================= */
+/* MÓVIL - CARRUSEL DE 1 TARJETA */
+/* ============================================= */
+.mobileCarruselTrack {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 1rem;
+  padding: 0.5rem;
+  width: 100%;
+  scrollbar-width: thin;
+}
+
+.mobileCarruselTrack::-webkit-scrollbar {
+  height: 4px;
+}
+
+.mobileCarruselTrack::-webkit-scrollbar-track {
+  background: var(--bordes);
+  border-radius: 4px;
+}
+
+.mobileCarruselTrack::-webkit-scrollbar-thumb {
+  background: var(--primario);
+  border-radius: 4px;
+}
+
+/* ============================================= */
+/* RESPONSIVE - MÓVIL (max-width: 768px) */
+/* ============================================= */
+@media (max-width: 768px) {
+  .comoFuncionaSection,
+  .emprendimientosSection,
+  .rankingSection,
+  .carruselSection,
+  .destacadosSection {
+    padding: 2rem 1rem;
+  }
+  
+  .premiosGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ganadorDetalles {
+    grid-template-columns: 1fr;
+    gap: 0.5rem !important;
+    margin: 0.75rem 0 !important;
+  }
+
+  .carruselSection .ganadorDetalles .detalleItem:nth-child(3) {
+    display: none !important;
+  }
+  
+  .carruselSection .detalleItem {
+    padding: 0.5rem !important;
+  }
+
+  .carruselHorizontalBtn {
+    display: none;
+  }
+  
+  .carruselHorizontalControles {
+    display: none;
+  }
+  
+  .emptyCard {
+    display: none;
+  }
+  
+  .rankingTable th,
+  .rankingTable td {
+    padding: 0.7rem 0.75rem;
+  }
+  
+  .rankingTable {
+    display: block;
+    overflow-x: auto;
+  }
+  
+  .badge {
+    width: 30px;
+    height: 30px;
+    font-size: 0.85rem;
+  }
+  
+  .usuarioFoto {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .avatarImage {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .puntos {
+    font-size: 1rem;
+  }
+  
+  .nivel {
+    padding: 0.25rem 0.7rem;
+    font-size: var(--font-xs);
+  }
+  
+  .usuarioNombre {
+    font-size: var(--font-small);
+  }
+  
+  .carruselContainer {
+    gap: 1rem;
+  }
+  
+  .carruselBtn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  
+  .carruselControles {
+    flex-direction: column;
+  }
+  
+  .controlBtn {
+    padding: 0.4rem 1.2rem;
+  }
+  
+  .fotoIcono {
+    width: 100px;
+    height: 100px;
+    font-size: 3rem;
+  }
+  
+  .ganadorNombre {
+    font-size: var(--font-h3);
+  }
+
+  .footer {
+    padding: 2rem 1rem 1rem;
+  }
+  
+  .footerContainer {
+    gap: 1.5rem;
+  }
+  
+  .footerCol {
+    text-align: center;
+  }
+  
+  .socialLinks {
+    justify-content: center;
+  }
+  
+  .appButtons {
+    align-items: center;
+  }
+  
+  .emprendimientoIconoHorizontal {
+    width: 65px;
+    height: 65px;
+  }
+  
+  .iconoHorizontal {
+    font-size: 2.2rem;
+  }
+  
+  .imagenPlaceholder {
+    max-width: 350px;
+  }
+}
+
+/* ============================================= */
+/* RESPONSIVE - MÓVIL MUY PEQUEÑO (max-width: 480px) */
+/* ============================================= */
+@media (max-width: 480px) {
+  .pasoCard {
+    padding: 1.5rem;
+  }
+  
+  .badge {
+    width: 26px;
+    height: 26px;
+    font-size: 0.75rem;
+  }
+  
+  .usuarioFoto {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .avatarImage {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .rankingTable th,
+  .rankingTable td {
+    padding: 0.5rem 0.5rem;
+  }
+  
+  .usuarioInfo {
+    gap: 0.5rem;
+  }
+  
+  .usuarioNombre {
+    font-size: var(--font-xs);
+  }
+  
+  .puntos {
+    font-size: 0.9rem;
+  }
+  
+  .nivel {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.65rem;
+  }
+  
+  .rankingNota {
+    padding: 0.4rem 1rem;
+    font-size: 0.65rem;
+  }
+  
+  .emprendimientoIconoHorizontal {
+    width: 55px;
+    height: 55px;
+  }
+  
+  .iconoHorizontal {
+    font-size: 1.8rem;
+  }
+  
+  .imagenPlaceholder {
+    max-width: 280px;
+  }
+}
+
+/* ============================================= */
+/* TABLET (769px - 1024px) */
+/* ============================================= */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .emprendimientoCardHorizontal {
+    min-width: 240px;
+    max-width: 260px;
+    padding: 1rem;
+  }
+  
+  .emprendimientoIconoHorizontal {
+    width: 65px;
+    height: 65px;
+  }
+  
+  .iconoHorizontal {
+    font-size: 2.3rem;
+  }
+  
+  .emprendimientoNombreHorizontal {
+    font-size: 1.1rem;
+  }
+  
+  .tripleCardContainer {
+    gap: 1rem;
+  }
+  
+  .detalleTextoHorizontal {
+    font-size: 0.7rem;
+  }
+  
+  .imagenPlaceholder {
+    max-width: 450px;
+  }
+}
+
+/* ============================================= */
+/* ESTILOS DE IMÁGENES Y AVATARES */
+/* ============================================= */
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatarEmoji {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.premioImagen {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  display: block;
+}
+
+.premioStockInfo {
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  margin: 1rem 0;
+}
+
+.stockItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.stockItem:last-child {
+  margin-bottom: 0;
+}
+
+.stockLabel {
+  color: var(--texto-secundario);
+  font-weight: 500;
+}
+
+.stockValue {
+  color: var(--texto-principal);
+  font-weight: 600;
+}
+
+.stockAgotado {
+  color: var(--error);
+  font-weight: 700;
+}
+
+.premioFechasInfo {
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  margin: 1rem 0;
+}
+
+.fechaItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.fechaItem:last-child {
+  margin-bottom: 0;
+}
+
+.fechaLabel {
+  color: var(--alerta);
+  font-weight: 500;
+}
+
+.fechaValue {
+  color: var(--alerta);
+}
+
+.fechaVencimiento {
+  color: var(--error);
+  font-weight: 600;
+}
+
+/* ============================================= */
+/* 📍 AQUÍ ESTÁN LOS ESTILOS DE LOS BOTONES DE REDES SOCIALES */
+/* ============================================= */
+
+.redesSocialesContainer {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.socialBtnWhatsapp,
+.socialBtnInstagram,
+.socialBtnTiktok {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-md);
+  font-size: var(--font-xs);
+  font-weight: 500;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+/* Botón WhatsApp */
+.socialBtnWhatsapp {
+  background: rgba(37, 211, 102, 0.15);
+  color: #25D366;
+  border-color: rgba(37, 211, 102, 0.3);
+}
+
+.socialBtnWhatsapp:hover {
+  background: #25D366;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+/* Botón Instagram */
+.socialBtnInstagram {
+  background: linear-gradient(135deg, rgba(225, 48, 108, 0.15), rgba(252, 175, 69, 0.1));
+  color: #E1306C;
+  border-color: rgba(225, 48, 108, 0.3);
+}
+
+.socialBtnInstagram:hover {
+  background: linear-gradient(135deg, #E1306C, #FCAF45);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(225, 48, 108, 0.3);
+}
+
+/* Botón TikTok */
+.socialBtnTiktok {
+  background: rgba(0, 0, 0, 0.3);
+  color: #00F2EA;
+  border-color: rgba(0, 242, 234, 0.3);
+}
+
+.socialBtnTiktok:hover {
+  background: #000;
+  color: #00F2EA;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 242, 234, 0.3);
+}
+
+/* Responsive para botones sociales */
+@media (max-width: 768px) {
+  .redesSocialesContainer {
+    gap: 0.5rem;
+  }
+  
+  .socialBtnWhatsapp,
+  .socialBtnInstagram,
+  .socialBtnTiktok {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .redesSocialesContainer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .socialBtnWhatsapp,
+  .socialBtnInstagram,
+  .socialBtnTiktok {
+    justify-content: center;
+    padding: 0.4rem;
+  }
+}
+
+/* Imagen genérica de redes (usada en cards de emprendimientos) */
+.redes {
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+  margin-right: 8px;
+}

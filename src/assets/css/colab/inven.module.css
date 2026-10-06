@@ -1,0 +1,1274 @@
+/* inventario.module.css - Versión Corregida con Paleta de Colores y Responsive */
+/* Variables directamente en el contenedor para React */
+
+.inventarioContainer {
+  /* Colores principales */
+  --primary-color: #00DAFF;
+  --primary-light: #00C4E6;
+  --primary-dark: #0088CC;
+  
+  /* Colores de acento */
+  --success-color: #00E5A0;
+  --warning-color: #FF8C42;
+  --danger-color: #ef4444;
+  
+  /* Textos */
+  --text-primary: #1A1D24;
+  --text-secondary: #5C6A7A;
+  
+  /* Fondos y bordes */
+  --border-color: #D0D5DD;
+  --background-light: #F2F4F8;
+  --background-white: #FFFFFF;
+  
+  /* Sombras */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  
+  /* TAMAÑOS DE FUENTE GLOBALES */
+   --font-h1: clamp(1rem, 2vw, 1.6rem);
+  --font-h2: clamp(0.85rem, 1.5vw, 1.15rem);
+  --font-h3: clamp(0.95rem, 1.4vw, 1.3rem);
+  --font-subtitle-lg: clamp(0.85rem, 1.2vw, 1rem);
+  --font-subtitle-md: clamp(0.8rem, 1vw, 0.95rem);
+  --font-body: clamp(0.75rem, 0.9vw, 0.9rem);
+  --font-small: clamp(0.7rem, 0.8vw, 0.8rem);
+  --font-xs: clamp(0.6rem, 0.7vw, 0.7rem);
+  
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background-color: var(--background-light);
+  min-height: 100vh;
+}
+
+/* Estado de carga */
+.cargandoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  gap: 15px;
+  background-color: var(--background-white);
+  border-radius: var(--radius-lg);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-color);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.cargandoContainer p {
+  color: var(--text-secondary);
+  font-size: var(--font-small);
+}
+
+/* Encabezado */
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.tituloSection h1 {
+  font-size: var(--font-h2);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tituloIcono {
+  color: var(--primary-color);
+}
+
+.subtitulo {
+  color: var(--text-secondary);
+  font-size: var(--font-small);
+  margin: 0;
+  max-width: 600px;
+}
+
+.accionesHeader {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.btnAgregar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: var(--primary-color);
+  color: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-small);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnAgregar:hover {
+  background: var(--primary-light);
+}
+
+.btnExportar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: var(--background-white);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: var(--font-small);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnExportar:hover {
+  background: var(--background-light);
+  border-color: var(--border-color);
+}
+
+/* Estadísticas */
+.estadisticasGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.estadisticaCard {
+  background: var(--background-white);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.estadisticaCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.estadisticaIcono {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(0, 218, 255, 0.1);
+  color: var(--primary-color);
+}
+
+.estadisticaIcono svg {
+  font-size: var(--font-subtitle-lg);
+}
+
+.estadisticaContenido h3 {
+  font-size: var(--font-small);
+  color: var(--text-secondary);
+  margin: 0 0 8px 0;
+  font-weight: 500;
+}
+
+.estadisticaValor {
+  font-size: var(--font-h2);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+  line-height: 1;
+}
+
+.estadisticaDetalle {
+  font-size: var(--font-small);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Filtros */
+.filtrosSection {
+  background: var(--background-white);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 30px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.filtrosGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.filtroGrupo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filtroGrupo label {
+  font-size: var(--font-small);
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filtroIcono {
+  color: var(--text-secondary);
+  font-size: var(--font-xs);
+}
+
+.filtroInput, .filtroSelect {
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-small);
+  color: var(--text-primary);
+  background: var(--background-white);
+  transition: border-color 0.2s;
+}
+
+.filtroInput:focus, .filtroSelect:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 218, 255, 0.1);
+}
+
+.contadorResultados {
+  font-size: var(--font-small);
+  color: var(--text-secondary);
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Tabla de productos */
+.tablaSection {
+  background: var(--background-white);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  margin-bottom: 30px;
+}
+
+.tablaHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.tablaHeader h3 {
+  font-size: var(--font-subtitle-md);
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tablaIcono {
+  color: var(--text-secondary);
+}
+
+.accionesRapidas {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btnRapido {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--background-light);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: var(--font-small);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnRapido:hover {
+  background: var(--border-color);
+}
+
+.sinProductos {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+}
+
+.sinIcono {
+  font-size: var(--font-h2);
+  color: var(--border-color);
+  margin-bottom: 20px;
+}
+
+.sinProductos h3 {
+  font-size: var(--font-subtitle-lg);
+  color: var(--text-primary);
+  margin: 0 0 10px 0;
+}
+
+.sinProductos p {
+  margin: 0 0 20px 0;
+  font-size: var(--font-small);
+}
+
+.btnLimpiar {
+  background: var(--primary-color);
+  color: var(--text-primary);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: var(--font-small);
+}
+
+.btnLimpiar:hover {
+  background: var(--primary-light);
+}
+
+.tablaContainer {
+  overflow-x: auto;
+}
+
+.tablaProductos {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.tablaProductos thead {
+  background: var(--background-light);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.tablaProductos th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--font-small);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* ANCHOS DE COLUMNA */
+.tablaProductos th:nth-child(1) { width: 12%; min-width: 120px; }  /* Código */
+.tablaProductos th:nth-child(2) { width: 25%; min-width: 200px; }  /* Producto */
+.tablaProductos th:nth-child(3) { width: 10%; min-width: 100px; }  /* Categoría */
+.tablaProductos th:nth-child(4) { width: 12%; min-width: 100px; }  /* Precio Venta */
+.tablaProductos th:nth-child(5) { width: 10%; min-width: 80px; }   /* Margen */
+.tablaProductos th:nth-child(6) { width: 13%; min-width: 120px; }  /* Stock */
+.tablaProductos th:nth-child(7) { width: 10%; min-width: 100px; }  /* Estado */
+.tablaProductos th:nth-child(8) { width: 8%; min-width: 80px; }    /* Acciones */
+
+.tablaProductos tbody tr {
+  border-bottom: 1px solid var(--border-color);
+  transition: background 0.2s;
+}
+
+.tablaProductos tbody tr:hover {
+  background: var(--background-light);
+}
+
+.tablaProductos td {
+  padding: 16px;
+  font-size: var(--font-small);
+  vertical-align: top;
+}
+
+/* Celdas específicas */
+.codigoCell {
+  white-space: nowrap;
+}
+
+.codigoContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.codigoIcono {
+  color: var(--text-secondary);
+  font-size: var(--font-small);
+}
+
+.codigoTexto {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.productoCell {
+  min-width: 200px;
+}
+
+.productoInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.productoNombre {
+  font-size: var(--font-small);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.productoDescripcion {
+  font-size: var(--font-small);
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.productoDetalles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.detalleItem {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+.categoriaCell {
+  white-space: nowrap;
+}
+
+.categoriaBadge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--background-light);
+  color: var(--text-primary);
+  border-radius: 12px;
+  font-size: var(--font-xs);
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.preciosCell {
+  min-width: 100px;
+}
+
+.preciosContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.precioItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.precioLabel {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+.precioValor {
+  font-size: var(--font-small);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.precioValorVenta {
+  font-size: var(--font-small);
+  font-weight: 600;
+  color: var(--success-color);
+}
+
+.stockCell {
+  min-width: 120px;
+}
+
+.stockContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stockInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stockEstado {
+  font-size: var(--font-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.stockCantidad {
+  font-size: var(--font-small);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.stockMinimo {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+.stockAlerta {
+  font-size: var(--font-xs);
+  color: var(--warning-color);
+  background: rgba(255, 140, 66, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.puntosCell {
+  text-align: center;
+}
+
+.puntosContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.puntosValor {
+  font-size: var(--font-subtitle-md);
+  font-weight: 700;
+  color: var(--warning-color);
+}
+
+.puntosInfo {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+.estadoCell {
+  white-space: nowrap;
+}
+
+.estadoContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.estadoBadge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: var(--font-xs);
+  font-weight: 500;
+}
+
+.estadoActivo {
+  background: rgba(0, 229, 160, 0.1);
+  color: var(--success-color);
+}
+
+.estadoInactivo {
+  background: var(--background-light);
+  color: var(--text-secondary);
+}
+
+.toggleBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-small);
+  color: var(--text-secondary);
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.toggleBtn:hover {
+  background: var(--background-light);
+}
+
+.accionesCell {
+  white-space: nowrap;
+}
+
+.accionesContainer {
+  display: flex;
+  gap: 8px;
+}
+
+.btnEditar, .btnEliminar {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.btnEditar {
+  background: var(--primary-color);
+  color: var(--text-primary);
+}
+
+.btnEditar:hover {
+  background: var(--primary-light);
+}
+
+.btnEliminar {
+  background: var(--danger-color);
+  color: white;
+}
+
+.btnEliminar:hover {
+  background: #dc2626;
+}
+
+/* Modal de formulario */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modalContent {
+  background: var(--background-white);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--background-light);
+  border-radius: 16px 16px 0 0;
+}
+
+.modalHeader h2 {
+  font-size: var(--font-subtitle-lg);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.modalCloseBtn {
+  background: none;
+  border: none;
+  font-size: var(--font-h3);
+  cursor: pointer;
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.modalCloseBtn:hover {
+  background: var(--background-light);
+}
+
+/* Formulario */
+.formulario {
+  padding: 24px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formColumna {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGrupo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGrupo label {
+  font-size: var(--font-small);
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.formIcono {
+  color: var(--text-secondary);
+  font-size: var(--font-small);
+}
+
+.formInput, .formSelect, .formTextarea {
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-small);
+  color: var(--text-primary);
+  background: var(--background-white);
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.formInput:focus, .formSelect:focus, .formTextarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 218, 255, 0.1);
+}
+
+.formTextarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.formAyuda {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  margin: 4px 0 0 0;
+}
+
+.formCheckbox {
+  margin-top: 10px;
+}
+
+.formCheckbox label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: var(--font-small);
+  color: var(--text-primary);
+}
+
+.formCheckbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+}
+
+.checkboxLabel {
+  font-weight: 500;
+}
+
+.formAcciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.btnCancelar {
+  padding: 12px 24px;
+  background: var(--background-white);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: var(--font-small);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnCancelar:hover {
+  background: var(--background-light);
+  border-color: var(--border-color);
+}
+
+.btnGuardar {
+  padding: 12px 24px;
+  background: var(--primary-color);
+  color: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-small);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnGuardar:hover {
+  background: var(--primary-light);
+}
+
+/* Ajuste de stock */
+.ajusteStockSection {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: var(--background-light);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--primary-color);
+}
+
+.ajusteStockHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.ajusteStockHeader h4 {
+  margin: 0;
+  font-size: var(--font-small);
+  color: var(--text-primary);
+}
+
+.btnToggleAjuste {
+  padding: 0.25rem 0.75rem;
+  font-size: var(--font-xs);
+  background-color: var(--border-color);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btnToggleAjuste:hover {
+  background-color: var(--border-color);
+}
+
+.ajusteStockContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.ajusteStockControls {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btnAjuste {
+  padding: 0.5rem 1rem;
+  background-color: var(--background-light);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: var(--font-xs);
+  transition: all 0.2s;
+}
+
+.btnAjuste:hover {
+  background-color: var(--border-color);
+  transform: scale(1.02);
+}
+
+.ajusteInput {
+  width: 100px;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 500;
+  font-size: var(--font-xs);
+  background: var(--background-white);
+}
+
+.ajusteInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(0, 218, 255, 0.1);
+}
+
+.ajusteStockInfo {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.75rem;
+  background-color: var(--background-white);
+  border-radius: 6px;
+  font-size: var(--font-xs);
+  border: 1px solid var(--border-color);
+}
+
+.ajusteStockInfo span {
+  color: var(--text-secondary);
+}
+
+.ajusteStockInfo strong {
+  color: var(--text-primary);
+  margin-left: 0.25rem;
+}
+
+.btnAplicarAjuste {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-color);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: var(--font-xs);
+  transition: all 0.2s;
+}
+
+.btnAplicarAjuste:hover:not(:disabled) {
+  background-color: var(--primary-light);
+  transform: scale(1.02);
+}
+
+.btnAplicarAjuste:disabled {
+  background-color: var(--text-secondary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Estilo para atributos resumen */
+.atributosResumen {
+  color: var(--text-secondary);
+  font-size: var(--font-xs);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* Estilo para filas de productos inactivos */
+.tablaProductos tbody tr.inactivo {
+  opacity: 0.7;
+  background-color: var(--background-light);
+}
+
+.tablaProductos tbody tr.inactivo:hover {
+  opacity: 0.9;
+  background-color: var(--border-color);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ======================================== */
+/* RESPONSIVE - SOLO 3 COLUMNAS EN MÓVIL */
+/* ======================================== */
+
+/* Desktop grande - 4 columnas */
+@media (min-width: 1025px) {
+  .estadisticasGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Tablets y pantallas medianas (769px a 1024px) - 2 columnas */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .estadisticasGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Tablets pequeñas y móviles grandes (481px a 768px) */
+@media (max-width: 768px) {
+  .inventarioContainer {
+    padding: 15px;
+  }
+  
+  .encabezado {
+    flex-direction: column;
+  }
+  
+  .accionesHeader {
+    width: 100%;
+  }
+  
+  .btnAgregar, .btnExportar {
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .estadisticasGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .tablaHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .accionesRapidas {
+    width: 100%;
+  }
+  
+  .btnRapido {
+    flex: 1;
+    justify-content: center;
+  }
+  
+  /* ===== SOLO 3 COLUMNAS: PRODUCTO, STOCK, ACCIONES ===== */
+  .tablaContainer {
+    overflow-x: visible;
+    margin: 0 -15px;
+    padding: 0 15px;
+  }
+  
+  .tablaProductos {
+    min-width: unset;
+    width: 100%;
+  }
+  
+  /* Ocultar todas las columnas excepto Producto (2), Stock (6) y Acciones (8) */
+  .tablaProductos th:nth-child(1),
+  .tablaProductos td:nth-child(1),
+  .tablaProductos th:nth-child(3),
+  .tablaProductos td:nth-child(3),
+  .tablaProductos th:nth-child(4),
+  .tablaProductos td:nth-child(4),
+  .tablaProductos th:nth-child(5),
+  .tablaProductos td:nth-child(5),
+  .tablaProductos th:nth-child(7),
+  .tablaProductos td:nth-child(7) {
+    display: none;
+  }
+  
+  /* Mostrar solo 3 columnas */
+  .tablaProductos th:nth-child(2),
+  .tablaProductos td:nth-child(2) { 
+    width: 50%; 
+    min-width: 150px;
+  }
+  
+  .tablaProductos th:nth-child(6),
+  .tablaProductos td:nth-child(6) { 
+    width: 30%; 
+    min-width: 100px;
+  }
+  
+  .tablaProductos th:nth-child(8),
+  .tablaProductos td:nth-child(8) { 
+    width: 20%; 
+    min-width: 60px;
+  }
+  
+  /* Ajustar padding y fuentes */
+  .tablaProductos th,
+  .tablaProductos td {
+    padding: 10px 8px;
+    font-size: var(--font-xs);
+  }
+  
+  .tablaProductos th {
+    font-size: var(--font-xs);
+    padding: 8px 6px;
+  }
+  
+  /* Ocultar texto de estado de stock (Disponible, Bajo Stock, Agotado) */
+  .stockEstado {
+    display: none;
+  }
+  
+  /* Mostrar solo el número de stock */
+  .stockCantidad {
+    font-size: var(--font-xs);
+    font-weight: 600;
+  }
+  
+  /* Ajustes internos */
+  .productoCell {
+    min-width: unset;
+  }
+  
+  .productoNombre {
+    font-size: var(--font-xs);
+  }
+  
+  .productoDescripcion {
+    font-size: var(--font-xs);
+  }
+  
+  .productoDetalles .detalleItem {
+    font-size: var(--font-xs);
+  }
+  
+  .stockCantidad {
+    font-size: var(--font-xs);
+  }
+  
+  .stockAlerta {
+    font-size: var(--font-xs);
+    padding: 2px 6px;
+  }
+  
+  .btnEditar, .btnEliminar {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .btnEditar svg, .btnEliminar svg {
+    font-size: var(--font-xs);
+  }
+}
+
+/* Móviles pequeños (480px o menos) */
+@media (max-width: 480px) {
+  .estadisticasGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+  
+  .formAcciones {
+    flex-direction: column;
+  }
+  
+  .btnCancelar, .btnGuardar {
+    width: 100%;
+  }
+  
+  /* Ajustes adicionales para móvil pequeño */
+  .tablaProductos th,
+  .tablaProductos td {
+    padding: 6px 4px;
+    font-size: var(--font-xs);
+  }
+  
+  .tablaProductos th:nth-child(2),
+  .tablaProductos td:nth-child(2) { 
+    width: 45%; 
+    min-width: 100px;
+  }
+  
+  .tablaProductos th:nth-child(6),
+  .tablaProductos td:nth-child(6) { 
+    width: 35%; 
+    min-width: 80px;
+  }
+  
+  .tablaProductos th:nth-child(8),
+  .tablaProductos td:nth-child(8) { 
+    width: 20%; 
+    min-width: 50px;
+  }
+  
+  .productoInfo {
+    gap: 3px;
+  }
+  
+  .stockContainer {
+    gap: 3px;
+  }
+  
+  .accionesContainer {
+    gap: 4px;
+  }
+}

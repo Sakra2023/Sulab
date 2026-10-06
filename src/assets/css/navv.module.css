@@ -1,0 +1,489 @@
+/* navv.module.css - NavAdmin como barra lateral izquierda */
+/* Variables directamente en el contenedor para React */
+
+/* Contenedor principal - Layout con sidebar */
+.navAdminContainer {
+  /* Colores */
+  --fondo-principal: #0A0C10;
+  --fondo-secundario: #14171C;
+  --primario: #00DAFF;
+  --primario-hover: #0088CC;
+  --exito: #00E5A0;
+  --alerta: #FF8C42;
+  --texto-principal: #E8EDF2;
+  --texto-secundario: #889280;
+  --bordes: #1F2937;
+  --error: #FF3B5C;
+  --sidebar-width: 190px;
+  
+  /* TAMAÑOS DE FUENTE GLOBALES - Sistema tipográfico responsive */
+  --font-h1: clamp(1rem, 2vw, 1.6rem);
+  --font-h2: clamp(0.85rem, 1.5vw, 1.15rem);
+  --font-h3: clamp(0.95rem, 1.4vw, 1.3rem);
+  --font-subtitle-lg: clamp(0.85rem, 1.2vw, 1rem);
+  --font-subtitle-md: clamp(0.8rem, 1vw, 0.95rem);
+  --font-body: clamp(0.75rem, 0.9vw, 0.9rem);
+  --font-small: clamp(0.7rem, 0.8vw, 0.8rem);
+  --font-xs: clamp(0.6rem, 0.7vw, 0.7rem);
+  
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--fondo-secundario);
+  color: var(--texto-principal);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+  border-right: 2px solid var(--primario);
+  padding: 2rem 1rem;
+  z-index: 1000;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Contenedor de enlaces - Vertical */
+.navAdminLinks {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+/* Enlaces normales - ESTILO BASE */
+.navAdminItem {
+  color: var(--texto-principal);
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: var(--font-small);
+  transition: all 0.3s ease;
+  position: relative;
+  border: 1px solid transparent;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+/* Efecto hover */
+.navAdminItem:hover {
+  background-color: rgba(0, 218, 255, 0.1);
+  color: var(--primario);
+  transform: translateX(4px);
+  border-color: var(--primario);
+}
+
+/* ESTADO ACTIVO */
+.active {
+  background-color: rgba(0, 218, 255, 0.15) !important;
+  color: var(--primario) !important;
+  font-weight: 600 !important;
+  border: 1px solid var(--primario) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0, 218, 255, 0.2) !important;
+  text-decoration: none !important;
+}
+
+/* IMPORTANTE: Sobrescribir cualquier estilo por defecto de React Router */
+.navAdminLinks a {
+  border-bottom: none !important;
+  text-decoration: none !important;
+}
+
+/* Botón de logout - Parte inferior */
+.navAdminLogout {
+  background: #99001C;
+  color: var(--texto-principal);
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: var(--font-small);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  margin-top: auto;
+}
+
+.navAdminLogout:hover {
+  background: var(--error);
+  transform: scale(1.02);
+  box-shadow: 0 3px 8px rgba(255, 59, 92, 0.3);
+}
+
+/* Título/bienvenida - Parte superior */
+.navAdminTitle {
+  font-size: var(--font-subtitle-md);
+  font-weight: 700;
+  color: var(--primario);
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--bordes);
+}
+
+.navAdminUser {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: rgba(0, 218, 255, 0.05);
+  border-radius: 12px;
+}
+
+.userName {
+  color: var(--texto-secundario);
+  font-size: var(--font-xs);
+  text-align: center;
+}
+
+.userAvatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--primario);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-subtitle-lg);
+  color: var(--fondo-principal);
+}
+
+/* Iconos opcionales para los enlaces */
+.icon {
+  font-size: var(--font-subtitle-md);
+  min-width: 24px;
+}
+
+/* Clase para el contenido principal (debe acompañar al sidebar) */
+.mainContent {
+  margin-left: var(--sidebar-width);
+  padding: 2rem;
+  min-height: 100vh;
+  background: var(--fondo-principal);
+  transition: margin-left 0.3s ease;
+}
+
+/* ==================== */
+/* RESPONSIVE - MÓVILES */
+/* ==================== */
+
+/* Overlay para móvil */
+.mobileOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+  backdrop-filter: blur(3px);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Logo móvil - visible solo en móvil */
+.mobileLogo {
+  display: none;
+}
+
+/* Responsive - Para móviles, sidebar colapsable HORIZONTAL */
+@media (max-width: 768px) {
+  /* Logo móvil en IZQUIERDA - FONDO NEGRO FIJO */
+  .mobileLogo {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1002;
+    background: black;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid var(--primario);
+  }
+  
+  /* Ajuste interno del logo móvil */
+  .mobileLogo .logo1 {
+    min-width: auto;
+    gap: 0.5rem;
+  }
+  
+  .mobileLogo .arr {
+    width: clamp(20px, 5vw, 28px);
+  }
+  
+  .mobileLogo .texto1,
+  .mobileLogo .texto2 {
+    font-size: clamp(0.8rem, 3vw, 1rem);
+  }
+
+  /* Ocultar logo dentro del sidebar en móvil */
+  .navAdminContainer .logo {
+    display: none;
+  }
+
+  /* Sidebar - MOVIMIENTO HORIZONTAL ASEGURADO */
+  .navAdminContainer {
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001;
+    width: 280px !important;
+    left: 0;
+    top: 0;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    padding-top: 80px;
+  }
+
+  /* Cuando está abierto - se mueve HORIZONTALMENTE a la derecha */
+  .navAdminContainer.open {
+    transform: translateX(0);
+  }
+
+  /* Fuerza movimiento horizontal - NO vertical */
+  .navAdminContainer,
+  .navAdminContainer.open {
+    transform-origin: left center;
+    will-change: transform;
+  }
+
+  /* Botón hamburguesa en DERECHA - FONDO NEGRO FIJO */
+  .hamburgerBtn {
+    position: fixed;
+    top: 0.75rem;
+    right: 1rem;
+    left: auto;
+    z-index: 1003;
+    background: black;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .hamburgerBtn span {
+    width: 22px;
+    height: 2.5px;
+    background: var(--primario);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  /* Animación del botón hamburguesa cuando está abierto */
+  .hamburgerBtn.open span:first-child {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  
+  .hamburgerBtn.open span:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .hamburgerBtn.open span:last-child {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+
+  /* Contenido principal - CORREGIDO: sin fondo que tape */
+  .mainContent {
+    margin-left: 0;
+    padding: 1rem;
+    width: 100%;
+    overflow-x: hidden;
+    padding-top: 5rem;
+    background-color: transparent !important;
+  }
+
+  /* Estilo para .content */
+  .content {
+    background-color: transparent !important;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  /* Ajustes de texto y espaciado para móvil */
+  .navAdminItem {
+    font-size: var(--font-xs);
+    padding: 0.6rem 0.8rem;
+  }
+
+  .navAdminTitle {
+    font-size: var(--font-subtitle-md);
+  }
+
+  .userName {
+    font-size: var(--font-xs);
+  }
+
+  /* Ajustes del logo en móvil dentro del sidebar */
+  .navAdminContainer .arr {
+    width: clamp(22px, 6vw, 32px);
+  }
+  
+  .navAdminContainer .logo1 {
+    min-width: clamp(50px, 15vw, 70px);
+  }
+  
+  .navAdminContainer .texto1,
+  .navAdminContainer .texto2 {
+    font-size: clamp(0.85rem, 3.5vw, 1.1rem);
+  }
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .navAdminContainer {
+    width: 85% !important;
+    max-width: 260px !important;
+  }
+
+  .mobileLogo .arr {
+    width: clamp(18px, 6vw, 22px);
+  }
+  
+  .mobileLogo .texto1,
+  .mobileLogo .texto2 {
+    font-size: clamp(0.75rem, 3vw, 0.9rem);
+  }
+  
+  .navAdminContainer .arr {
+    width: clamp(18px, 5vw, 25px);
+  }
+  
+  .navAdminContainer .logo1 {
+    min-width: clamp(40px, 12vw, 55px);
+  }
+  
+  .navAdminContainer .texto1,
+  .navAdminContainer .texto2 {
+    font-size: clamp(0.75rem, 3vw, 0.9rem);
+  }
+
+  .hamburgerBtn {
+    padding: 0.4rem;
+    top: 0.7rem;
+    right: 0.8rem;
+  }
+  
+  .hamburgerBtn span {
+    width: 18px;
+    height: 2px;
+    gap: 4px;
+  }
+}
+
+/* Desktop - ocultar botones móviles */
+@media (min-width: 769px) {
+  .hamburgerBtn {
+    display: none;
+  }
+  
+  .mobileOverlay {
+    display: none;
+  }
+
+  .mobileLogo {
+    display: none;
+  }
+
+  /* Asegurar que el logo del sidebar se vea en desktop */
+  .navAdminContainer .logo {
+    display: flex;
+  }
+}
+
+/* ==================== */
+/* LOGO Y ESTILOS BASE - VERSIÓN DESKTOP GRANDE */
+/* ==================== */
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.logo a {
+  color: var(--texto-principal);
+  font-size: var(--font-subtitle-lg);
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.logo a:hover {
+  color: var(--primario);
+}
+
+.logo1 {
+  min-width: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Tamaño grande para desktop */
+.arr {
+  width: clamp(40px, 8vw, 65px);
+  height: auto;
+  transition: width 0.3s ease;
+}
+
+.texto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0.5rem;
+}
+
+.texto1,
+.texto2 {
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  margin: 0;
+}
+
+.texto2 {
+  color: var(--primario);
+}
+
+/* Iconos */
+.iconn {
+  width: 25px;
+  height: auto;
+}
+
+.iconnL {
+  width: 20px;
+  height: auto;
+}
+
+.paloma {
+  width: 7rem;
+  height: auto;
+  opacity: 0.01;
+}

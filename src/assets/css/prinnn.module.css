@@ -1,0 +1,39 @@
+/* Estilos base (escritorio) */
+.container {
+  display: flex;
+  position: relative;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+  min-height: 100vh;
+  margin-left: var(--sidebar-width, 190px);
+  transition: margin-left 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+/* Estilos para celular - CORREGIDO */
+@media (max-width: 768px) {
+  .container {
+    display: block;
+    position: relative;  /* ← Cambiado de fixed a relative */
+    min-height: 100vh;
+    overflow: visible;   /* ← Cambiado de hidden a visible */
+  }
+
+  .content {
+    margin-left: 0;
+    width: 100%;
+    min-height: 100vh;   /* ← Cambiado de height a min-height */
+    padding-top: 60px;   /* ← Ajustado para el navbar móvil */
+    padding-bottom: 20px;
+    background-color: transparent;
+    position: relative;
+    z-index: 1;
+    overflow-y: auto;    /* ← Scroll permitido */
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0;
+  }
+}

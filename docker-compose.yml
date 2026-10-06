@@ -25,8 +25,8 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     container_name: sulab-backend
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     environment:
       - NODE_ENV=production
       - PORT=3000
@@ -35,8 +35,7 @@ services:
       - DB_PASSWORD=sakra2023
       - DB_NAME=lap
       - JWT_SECRET=gatO-volador-123-cafe-XyZ!-R2D2
-      - FRONTEND_URL=http://sulabb.com
-      #- FRONTEND_URL=http://192.168.100.13:8080
+      - FRONTEND_URL=https://sulabb.com
     depends_on:
       mysql:
         condition: service_healthy
@@ -55,9 +54,26 @@ services:
       context: .
       dockerfile: Dockerfile.frontend
     container_name: sulab-frontend
-    ports:
-      - "8080:80"  # 👈 Puerto para el frontend
+    expose:
+      - "80"
     depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: sulab-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    depends_on:
+      - frontend
       - backend
     restart: unless-stopped
     networks:

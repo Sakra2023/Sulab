@@ -90,7 +90,7 @@ export default function NavUsuario() {
                         <img className={styles.arr} src={Arbol} alt="Arbol de navidad" />
                         <div className={styles.texto}>
                             <p className={styles.texto1}>Su</p>
-                            <p className={styles.texto2}>Lab</p>
+                            <p className={styles.texto2}>Labb</p>
                         </div>
                     </div>
                 </div>

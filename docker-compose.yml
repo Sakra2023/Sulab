@@ -35,7 +35,7 @@ services:
       - DB_PASSWORD=sakra2023
       - DB_NAME=lap
       - JWT_SECRET=gatO-volador-123-cafe-XyZ!-R2D2
-      - FRONTEND_URL=https://sulabb.com
+      - FRONTEND_URL=https://www.sulabb.com
     depends_on:
       mysql:
         condition: service_healthy

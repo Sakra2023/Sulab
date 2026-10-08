@@ -8,8 +8,6 @@ import {
   FaEye, FaEyeSlash, FaInfoCircle, FaUser, FaGoogle, FaCamera
 } from 'react-icons/fa';
 
-let socket = null;
-
 export default function ResumenPuntos() {
   const { user, loading: authLoading, fetchWithAuth, token } = useAuth();
 
@@ -53,11 +51,11 @@ export default function ResumenPuntos() {
     confirmar_contraseña: ''
   });
 
-  // Función helper para obtener URL completa de imagen
+  // ✅ Función helper para obtener URL completa de imagen (URLs relativas)
   const getImagenUrl = (url) => {
     if (!url) return null;
-    if (url.startsWith('http')) return url;
-    return `${import.meta.env.VITE_API_URL}${url}`;
+    if (url.startsWith('http') || url.startsWith('data:') || url.startsWith('blob:')) return url;
+    return url;
   };
 
   // Cargar datos del usuario al iniciar
@@ -74,7 +72,7 @@ export default function ResumenPuntos() {
     }
   }, [user]);
 
-  // ✅ Inicializar Socket.io con actualización en tiempo real
+  // ✅ Inicializar Socket.io con actualización en tiempo real (URL relativa)
   useEffect(() => {
     // Limpiar socket anterior si existe
     if (socketRef.current) {
@@ -89,7 +87,9 @@ export default function ResumenPuntos() {
 
     console.log('🔌 Conectando socket con token:', token.substring(0, 20) + '...');
     
-    socketRef.current = io(import.meta.env.VITE_API_URL, {
+    // ✅ Conexión con URL relativa (mismo origen)
+    socketRef.current = io({
+      path: '/socket.io/',
       transports: ['websocket'],
       auth: { token: token },
       query: { userId: user.id }
@@ -137,9 +137,6 @@ export default function ResumenPuntos() {
             puntos_restantes: data.puntos_totales
           };
         });
-        
-        // ✅ También actualizar puntosTotales usado en el modal
-        setPuntosACanjear(prev => prev);
       }
     });
 
@@ -217,7 +214,7 @@ export default function ResumenPuntos() {
         socketRef.current = null;
       }
     };
-  }, [user?.id, token]); // ✅ Eliminado mostrarCanje y tipoCanje de dependencias
+  }, [user?.id, token]);
 
   // Cargar premios cuando se abre el modal y se selecciona la opción "regalo"
   useEffect(() => {
@@ -237,11 +234,11 @@ export default function ResumenPuntos() {
     }
   }, [mostrarModalPerfil]);
 
-  // Cargar configuración de puntos al iniciar (ruta pública - sin autenticación)
+  // ✅ Cargar configuración de puntos al iniciar (URL relativa)
   useEffect(() => {
     const cargarConfigPuntos = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/config-puntos`);
+        const response = await fetch('/api/config-puntos');
         const data = await response.json();
         if (data.success && data.config) {
           setValorPunto(parseFloat(data.config.valor_punto) || 0.005);
@@ -253,6 +250,7 @@ export default function ResumenPuntos() {
     cargarConfigPuntos();
   }, []);
 
+  // ✅ Cargar datos del usuario (URL relativa)
   useEffect(() => {
     if (authLoading) return;
 
@@ -271,7 +269,7 @@ export default function ResumenPuntos() {
       try {
         console.log('🔍 Cargando datos para usuario ID:', userId);
 
-        const response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/usuario/${userId}/info`);
+        const response = await fetchWithAuth(`/api/usuario/${userId}/info`);
 
         if (response.status === 403) {
           console.error('❌ Error 403: Token inválido o expirado');
@@ -347,10 +345,11 @@ export default function ResumenPuntos() {
     cargarDatosUsuario();
   }, [user, authLoading, valorPunto, fetchWithAuth]);
 
+  // ✅ Cargar premios (URL relativa)
   const cargarPremios = async () => {
     setCargandoPremios(true);
     try {
-      const response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/prem/premios/disponibles`);
+      const response = await fetchWithAuth(`/api/prem/premios/disponibles`);
       
       if (response.status === 403) {
         console.error('❌ Error 403 al cargar premios');
@@ -461,6 +460,7 @@ export default function ResumenPuntos() {
     }
   };
 
+  // ✅ Recargar datos (URL relativa)
   const recargarDatos = async () => {
     if (!user || !user.id) return;
 
@@ -468,7 +468,7 @@ export default function ResumenPuntos() {
     setError(null);
 
     try {
-      const response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/usuario/${user.id}/info`);
+      const response = await fetchWithAuth(`/api/usuario/${user.id}/info`);
       
       if (response.status === 403) {
         console.error('❌ Error 403 al recargar datos');
@@ -569,7 +569,7 @@ export default function ResumenPuntos() {
         if (formPerfil.direccion) formData.append('direccion', formPerfil.direccion);
         if (fotoPerfil) formData.append('foto', fotoPerfil);
         
-        const response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/usuario/${user.id}/perfil`, {
+        const response = await fetchWithAuth(`/api/usuario/${user.id}/perfil`, {
           method: 'PUT',
           body: formData
         });
@@ -620,7 +620,7 @@ export default function ResumenPuntos() {
         formData.append('contraseña_nueva', formPerfil.contraseña_nueva);
       }
       
-      const response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/usuario/${user.id}/perfil`, {
+      const response = await fetchWithAuth(`/api/usuario/${user.id}/perfil`, {
         method: 'PUT',
         body: formData
       });
@@ -646,7 +646,7 @@ export default function ResumenPuntos() {
     }
   };
 
-  // ✅ CORRECCIÓN: handleCanjear usando fetch directo (evita doble stringify)
+  // ✅ CORRECCIÓN: handleCanjear usando URLs relativas
   const handleCanjear = async () => {
     if (tipoCanje === 'regalo') {
       if (!premioSeleccionado) {
@@ -655,8 +655,7 @@ export default function ResumenPuntos() {
       }
       
       try {
-        // ✅ Usar fetch directo con el token
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/prem/usuario/${user.id}/canjear-premio`, {
+        const response = await fetch(`/api/prem/usuario/${user.id}/canjear-premio`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -693,8 +692,7 @@ export default function ResumenPuntos() {
       const efectivo = calcularValorEfectivo(puntosACanjear);
       
       try {
-        // ✅ Usar fetch directo con el token (evita doble stringify)
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/prem/usuario/${user.id}/solicitar-canje`, {
+        const response = await fetch(`/api/prem/usuario/${user.id}/solicitar-canje`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -1262,7 +1260,7 @@ export default function ResumenPuntos() {
                         </div>
                         {premio.imagen && (
                           <img 
-                            src={`${import.meta.env.VITE_API_URL}${premio.imagen}`}
+                            src={premio.imagen}
                             alt={premio.nombre} 
                             className={styles.premioImagen}
                             onError={(e) => {

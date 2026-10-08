@@ -82,19 +82,16 @@ export default function DashboardColab() {
     return true;
   };
 
-  // Inicializar Socket.io con autenticación
+  // ✅ Inicializar Socket.io con URL relativa (mismo origen)
   useEffect(() => {
     if (!usuarioId || !emprendimiento?.id || !verificarToken()) return;
 
     const token = localStorage.getItem('token');
     const empId = emprendimiento.id;
 
-    socketRef.current = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:3000', {
-      cors: {
-        origin: "http://localhost:5173",
-        methods: ["GET", "POST"],
-        credentials: true
-      },
+    socketRef.current = io({
+      path: '/socket.io/',
+      transports: ['websocket'],
       auth: { token }
     });
 
@@ -104,7 +101,7 @@ export default function DashboardColab() {
       socketRef.current.emit('join_room', `user_${usuarioId}`);
 
       try {
-        await fetch(`${import.meta.env.VITE_API_URL}/api/colab/unirse-sala`, {
+        await fetch(`/api/colab/unirse-sala`, {
           method: 'POST',
           headers: getAuthHeaders(),
           body: JSON.stringify({ socketId: socketRef.current.id })
@@ -220,12 +217,13 @@ export default function DashboardColab() {
     }
   };
 
+  // ✅ Cargar emprendimiento (URL relativa)
   const cargarEmprendimiento = async () => {
     if (!verificarToken()) return null;
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/colab/emprendimiento/propietario/${usuarioId}?_=${Date.now()}`,
+        `/api/colab/emprendimiento/propietario/${usuarioId}?_=${Date.now()}`,
         { headers: getAuthHeaders() }
       );
 
@@ -258,6 +256,7 @@ export default function DashboardColab() {
     }
   };
 
+  // ✅ Cargar métricas (URL relativa)
   const cargarMetricas = async (id) => {
     if (!verificarToken()) return;
 
@@ -266,9 +265,9 @@ export default function DashboardColab() {
 
       // ✅ Si está en modo personalizado y tiene fechas válidas
       if (modoPersonalizado && fechaInicio && fechaFin) {
-        url = `${import.meta.env.VITE_API_URL}/api/colab/metricas/${id}?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&_=${Date.now()}`;
+        url = `/api/colab/metricas/${id}?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&_=${Date.now()}`;
       } else {
-        url = `${import.meta.env.VITE_API_URL}/api/colab/metricas/${id}?periodo=${periodo}&_=${Date.now()}`;
+        url = `/api/colab/metricas/${id}?periodo=${periodo}&_=${Date.now()}`;
       }
 
       const response = await fetch(url, { headers: getAuthHeaders() });
@@ -292,12 +291,13 @@ export default function DashboardColab() {
     }
   };
 
+  // ✅ Cargar alertas (URL relativa)
   const cargarAlertas = async (id) => {
     if (!verificarToken()) return;
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/colab/alertas/${id}?_=${Date.now()}`,
+        `/api/colab/alertas/${id}?_=${Date.now()}`,
         { headers: getAuthHeaders() }
       );
 
@@ -349,7 +349,7 @@ export default function DashboardColab() {
     cargarDatosCompletos();
   };
 
-  // ✅ Función para eliminar alerta
+  // ✅ Eliminar alerta (URL relativa)
   const eliminarAlerta = async (id, tipo) => {
     if (!verificarToken()) return;
     if (!confirm('¿Eliminar esta alerta permanentemente?')) return;
@@ -359,7 +359,7 @@ export default function DashboardColab() {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/colab/alertas/${id}?tipo=${tipo}&_=${Date.now()}`,
+        `/api/colab/alertas/${id}?tipo=${tipo}&_=${Date.now()}`,
         {
           method: 'DELETE',
           headers: getAuthHeaders()
@@ -390,12 +390,11 @@ export default function DashboardColab() {
     }
   };
 
+  // ✅ Actualizar emprendimiento (URL relativa)
   const actualizarEmprendimiento = async (e) => {
     e.preventDefault();
     if (!verificarToken()) return;
 
-    // ✅ Normalizar payload: trim y null para vacíos
-    // ✅ CORREGIDO: Se eliminó "usuarioId" del payload (el backend lo obtiene del token JWT)
     const payload = {
       nombre: formData.nombre?.trim() || '',
       categoria: formData.categoria?.trim() || '',
@@ -407,7 +406,6 @@ export default function DashboardColab() {
       tiktok: formData.tiktok?.trim() || null
     };
 
-    // ✅ Validación previa para evitar 400 del backend
     if (payload.whatsapp) {
       const whatsappRegex = /^([0-9+\-\s]{8,20}|https?:\/\/.+)$/;
       if (!whatsappRegex.test(payload.whatsapp)) {
@@ -440,7 +438,7 @@ export default function DashboardColab() {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/colab/emprendimiento/${emprendimiento.id}?_=${Date.now()}`,
+        `/api/colab/emprendimiento/${emprendimiento.id}?_=${Date.now()}`,
         {
           method: 'PUT',
           headers: getAuthHeaders(),
@@ -481,12 +479,13 @@ export default function DashboardColab() {
     }
   };
 
+  // ✅ Marcar alerta como leída (URL relativa)
   const marcarAlertaLeida = async (id, tipo) => {
     if (!verificarToken()) return;
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/colab/alertas/${id}/leida?_=${Date.now()}`,
+        `/api/colab/alertas/${id}/leida?_=${Date.now()}`,
         {
           method: 'PUT',
           headers: getAuthHeaders(),
@@ -518,12 +517,13 @@ export default function DashboardColab() {
     }
   };
 
+  // ✅ Marcar todas las alertas como leídas (URL relativa)
   const marcarTodasAlertasLeidas = async () => {
     if (!verificarToken()) return;
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/colab/alertas/marcar-todas?_=${Date.now()}`,
+        `/api/colab/alertas/marcar-todas?_=${Date.now()}`,
         {
           method: 'PUT',
           headers: getAuthHeaders(),
@@ -556,8 +556,6 @@ export default function DashboardColab() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // ✅ No hacemos trim aquí para no molestar al usuario mientras escribe;
-    // el trim se aplica al enviar el formulario.
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 

@@ -35,7 +35,7 @@ export default function NotificacionesUsuario() {
     RECORDATORIO: 'recordatorio'
   };
 
-  // ✅ SOCKET.IO - Escuchar nuevas notificaciones en tiempo real
+  // ✅ SOCKET.IO - Escuchar nuevas notificaciones en tiempo real (URL relativa)
   useEffect(() => {
     // Limpiar socket anterior
     if (socketRef.current) {
@@ -50,7 +50,8 @@ export default function NotificacionesUsuario() {
 
     console.log('🔌 Conectando socket notificaciones...');
     
-    socketRef.current = io(import.meta.env.VITE_API_URL, {
+    socketRef.current = io({
+      path: '/socket.io/',
       transports: ['websocket'],
       auth: { token: token },
       query: { userId: user.id }
@@ -146,7 +147,7 @@ export default function NotificacionesUsuario() {
     setTimeout(() => toast.remove(), 5000);
   };
 
-  // Cargar notificaciones desde la API
+  // ✅ Cargar notificaciones desde la API (URL relativa)
   const cargarNotificaciones = async () => {
     if (!user || !user.id) return;
     
@@ -156,7 +157,7 @@ export default function NotificacionesUsuario() {
     try {
       console.log('🔍 Cargando notificaciones para usuario ID:', user.id);
       
-      const response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/usuario/${user.id}/notificaciones?limite=50`);
+      const response = await fetchWithAuth(`/api/usuario/${user.id}/notificaciones?limite=50`);
       
       if (response.status === 403) {
         console.error('❌ Error 403: Token inválido o expirado');
@@ -354,12 +355,12 @@ export default function NotificacionesUsuario() {
     }
   };
 
-  // Eliminar notificación
+  // ✅ Eliminar notificación (URL relativa)
   const eliminarNotificacion = async (id) => {
     if (!window.confirm('¿Eliminar esta notificación?')) return;
     
     try {
-      const response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/usuario/${user.id}/notificaciones/${id}`, {
+      const response = await fetchWithAuth(`/api/usuario/${user.id}/notificaciones/${id}`, {
         method: 'DELETE'
       });
       
@@ -383,10 +384,10 @@ export default function NotificacionesUsuario() {
     }
   };
 
-  // Marcar como leída
+  // ✅ Marcar como leída (URL relativa)
   const marcarComoLeida = async (id) => {
     try {
-      const response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/usuario/${user.id}/notificaciones/${id}/leer`, {
+      const response = await fetchWithAuth(`/api/usuario/${user.id}/notificaciones/${id}/leer`, {
         method: 'PUT'
       });
       

@@ -72,7 +72,7 @@ export default function HistorialTransacciones() {
     AJUSTE: 'ajuste'
   };
 
-  // ✅ SOCKET.IO - Escuchar eventos en tiempo real
+  // ✅ SOCKET.IO - Escuchar eventos en tiempo real (URL relativa)
   useEffect(() => {
     // Limpiar socket anterior
     if (socketRef.current) {
@@ -87,7 +87,8 @@ export default function HistorialTransacciones() {
 
     console.log('🔌 Conectando socket historial...');
     
-    socketRef.current = io(import.meta.env.VITE_API_URL, {
+    socketRef.current = io({
+      path: '/socket.io/',
       transports: ['websocket'],
       auth: { token: token },
       query: { userId: user.id }
@@ -128,7 +129,7 @@ export default function HistorialTransacciones() {
     };
   }, [user?.id, token]);
 
-  // Función para cargar transacciones desde la API
+  // ✅ Función para cargar transacciones desde la API (URL relativa)
   const cargarTransacciones = async () => {
     if (!user || !user.id) return;
     
@@ -138,7 +139,7 @@ export default function HistorialTransacciones() {
     try {
       console.log('🔍 Cargando transacciones para usuario ID:', user.id);
       
-      const response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/usuario/${user.id}/transacciones?limite=100`);
+      const response = await fetchWithAuth(`/api/usuario/${user.id}/transacciones?limite=100`);
       
       // Manejar error 403 (token expirado o inválido)
       if (response.status === 403) {

@@ -82,7 +82,6 @@ export default function NavUsuario() {
             {isMobile && isSidebarOpen && (
                 <div className={styles.mobileOverlay} onClick={closeSidebar} />
             )}
-
             {/* Sidebar */}
             <nav className={`${styles.navAdminContainer} ${isMobile && isSidebarOpen ? styles.open : ''}`}>
                 <div className={styles.logo}>

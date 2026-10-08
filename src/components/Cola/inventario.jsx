@@ -70,13 +70,14 @@ export default function InventarioColab() {
   };
 
   // ============================================
-  // CONEXIÓN SOCKET.IO
+  // CONEXIÓN SOCKET.IO (URL relativa)
   // ============================================
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token || !emprendimientoId) return;
 
-    const newSocket = io(import.meta.env.VITE_API_URL, {
+    const newSocket = io({
+      path: '/socket.io/',
       auth: { token },
       transports: ['websocket', 'polling']
     });
@@ -224,13 +225,14 @@ export default function InventarioColab() {
     }
   }, [emprendimientoId]);
 
+  // ✅ Cargar productos (URL relativa)
   const cargarProductos = async () => {
     if (!verificarToken()) return;
     
     setCargando(true);
     try {
       console.log(`📡 Fetching productos para emprendimientoId: ${emprendimientoId}`);
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/inventario/emprendimiento/${emprendimientoId}`, {
+      const response = await fetch(`/api/inventario/emprendimiento/${emprendimientoId}`, {
         headers: getAuthHeaders()
       });
       
@@ -422,7 +424,7 @@ export default function InventarioColab() {
   };
 
   // ============================================
-  // FUNCIÓN GUARDAR PRODUCTO CORREGIDA
+  // FUNCIÓN GUARDAR PRODUCTO (URLs relativas)
   // ============================================
   const guardarProducto = async (e) => {
     e.preventDefault();
@@ -466,13 +468,13 @@ export default function InventarioColab() {
     try {
       let response;
       if (productoEditando) {
-        response = await fetch(`${import.meta.env.VITE_API_URL}/api/inventario/${productoEditando.id}`, {
+        response = await fetch(`/api/inventario/${productoEditando.id}`, {
           method: 'PUT',
           headers: getAuthHeaders(),
           body: JSON.stringify(productoData)
         });
       } else {
-        response = await fetch(`${import.meta.env.VITE_API_URL}/api/inventario`, {
+        response = await fetch(`/api/inventario`, {
           method: 'POST',
           headers: getAuthHeaders(),
           body: JSON.stringify(productoData)
@@ -533,12 +535,13 @@ export default function InventarioColab() {
     setMostrarAjusteStock(false);
   };
 
+  // ✅ Eliminar producto (URL relativa)
   const eliminarProducto = async (id) => {
     if (!verificarToken()) return;
     if (!window.confirm('¿Eliminar este producto?')) return;
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/inventario/${id}`, { 
+      const response = await fetch(`/api/inventario/${id}`, { 
         method: 'DELETE',
         headers: getAuthHeaders()
       });
@@ -561,11 +564,12 @@ export default function InventarioColab() {
     }
   };
 
+  // ✅ Toggle activo (URL relativa)
   const toggleActivo = async (id, activoActual) => {
     if (!verificarToken()) return;
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/inventario/${id}`, {
+      const response = await fetch(`/api/inventario/${id}`, {
         method: 'PUT',
         headers: getAuthHeaders(),
         body: JSON.stringify({ activo: !activoActual })

@@ -124,13 +124,14 @@ export default function PuntosColab() {
   }, []);
 
   // ============================================
-  // CONECTAR SOCKET.IO CON AUTENTICACIÓN
+  // CONECTAR SOCKET.IO CON AUTENTICACIÓN (URL relativa)
   // ============================================
   useEffect(() => {
     if (!verificarToken()) return;
     
     const token = localStorage.getItem('token');
-    const newSocket = io(import.meta.env.VITE_API_URL, {
+    const newSocket = io({
+      path: '/socket.io/',
       withCredentials: true,
       transports: ['websocket', 'polling'],
       auth: { token }
@@ -287,14 +288,14 @@ export default function PuntosColab() {
     }
   }, [busquedaProducto, emprendimientoId]);
 
-  // Buscar productos en API con autenticación
+  // ✅ Buscar productos en API (URL relativa)
   const buscarProductos = async (query) => {
     if (!query || query.length < 2 || !verificarToken()) return;
     
     setCargandoProductos(true);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/colab/puntos/productos/buscar?emprendimiento_id=${emprendimientoId}&query=${encodeURIComponent(query)}`,
+        `/api/colab/puntos/productos/buscar?emprendimiento_id=${emprendimientoId}&query=${encodeURIComponent(query)}`,
         { headers: getAuthHeaders() }
       );
       
@@ -343,12 +344,12 @@ export default function PuntosColab() {
     setErrorPuntos('');
   };
 
-  // Cargar clientes desde API con autenticación
+  // ✅ Cargar clientes desde API (URL relativa)
   const cargarClientesReales = async () => {
     if (!verificarToken()) return;
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/colab/puntos/usuarios/rol/usuario`, {
+      const response = await fetch(`/api/colab/puntos/usuarios/rol/usuario`, {
         headers: getAuthHeaders()
       });
       
@@ -366,7 +367,7 @@ export default function PuntosColab() {
       if (data.success && data.usuarios && data.usuarios.length > 0) {
         const clientesConPuntos = await Promise.all(data.usuarios.map(async (u) => {
           try {
-            const puntosResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/colab/puntos/usuarios/${u.id}/puntos`, {
+            const puntosResponse = await fetch(`/api/colab/puntos/usuarios/${u.id}/puntos`, {
               headers: getAuthHeaders()
             });
             const puntosData = await puntosResponse.json();
@@ -414,12 +415,12 @@ export default function PuntosColab() {
     }
   };
 
-  // Cargar transacciones desde API con autenticación
+  // ✅ Cargar transacciones desde API (URL relativa)
   const cargarTransaccionesReales = async () => {
     if (!verificarToken()) return;
     
     try {
-      const url = `${import.meta.env.VITE_API_URL}/api/colab/puntos/transacciones/emprendimiento/${emprendimientoId}`;
+      const url = `/api/colab/puntos/transacciones/emprendimiento/${emprendimientoId}`;
       
       const response = await fetch(url, { headers: getAuthHeaders() });
       
@@ -460,12 +461,12 @@ export default function PuntosColab() {
     }
   };
 
-  // Cargar configuración de puntos con autenticación
+  // ✅ Cargar configuración de puntos (URL relativa)
   const cargarConfigPuntos = async () => {
     if (!verificarToken()) return;
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/colab/puntos/config-puntos`, {
+      const response = await fetch(`/api/colab/puntos/config-puntos`, {
         headers: getAuthHeaders()
       });
       
@@ -510,12 +511,12 @@ export default function PuntosColab() {
     return '👤';
   };
 
-  // Seleccionar cliente de las sugerencias
+  // ✅ Seleccionar cliente de las sugerencias (URL relativa)
   const seleccionarCliente = async (cliente) => {
     if (!verificarToken()) return;
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/colab/puntos/usuarios/${cliente.id}/puntos`, {
+      const response = await fetch(`/api/colab/puntos/usuarios/${cliente.id}/puntos`, {
         headers: getAuthHeaders()
       });
       if (response.ok) {
@@ -704,7 +705,7 @@ export default function PuntosColab() {
     return true;
   };
 
-  // Procesar pago con autenticación
+  // ✅ Procesar pago (URL relativa)
   const procesarPagoMixto = async () => {
     if (!verificarToken()) return;
     
@@ -756,7 +757,7 @@ export default function PuntosColab() {
         }
       }
       
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/colab/puntos/canjear-puntos`, {
+      const response = await fetch(`/api/colab/puntos/canjear-puntos`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(requestBody)

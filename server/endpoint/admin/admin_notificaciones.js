@@ -213,11 +213,10 @@ const invalidarConfigPuntos = () => {
 };
 
 // ============================================
-// FUNCIONES DE EMISIÓN DE SOCKET.IO (CORREGIDAS)
+// FUNCIONES DE EMISIÓN DE SOCKET.IO
 // ============================================
 
 const emitirNuevaSolicitud = (io, data) => {
-  // ✅ VERIFICACIÓN MEJORADA
   if (!io) {
     console.error('❌ [SOCKET] io no está definido en emitirNuevaSolicitud');
     logger.error('❌ io no está definido en emitirNuevaSolicitud');
@@ -228,13 +227,11 @@ const emitirNuevaSolicitud = (io, data) => {
     console.log('📡 [SOCKET] Emitiendo nueva_solicitud_canje:', JSON.stringify(data, null, 2));
     logger.info(`📡 Emitiendo nueva_solicitud_canje para solicitud: ${data.solicitud_id}`);
     
-    // Emitir a todos los administradores
     io.to('admin').emit('nueva_solicitud_canje', {
       ...data,
       timestamp: new Date().toISOString()
     });
     
-    // Emitir notificación en tiempo real para admins
     io.to('admin').emit('nueva_notificacion_admin', {
       id: data.solicitud_id,
       type: 'solicitud_canje',
@@ -258,7 +255,7 @@ const emitirNuevaSolicitud = (io, data) => {
   }
 };
 
-// ✅ FUNCIÓN CORREGIDA - Agrega emisión a emprendimiento
+// ✅ REVERTIDA: Sin detallesCanje
 const emitirSolicitudProcesada = (io, data) => {
   if (!io) {
     console.error('❌ [SOCKET] io no está definido en emitirSolicitudProcesada');
@@ -280,7 +277,7 @@ const emitirSolicitudProcesada = (io, data) => {
       timestamp: new Date().toISOString()
     });
 
-    // ✅ NUEVO: Emitir al emprendimiento si existe (para colaboradores)
+    // ✅ Emitir al emprendimiento si existe (para colaboradores)
     if (data.emprendimiento_id) {
       io.to(`emprendimiento_${data.emprendimiento_id}`).emit('canje_procesado', {
         solicitud_id: data.solicitud_id,
@@ -293,13 +290,15 @@ const emitirSolicitudProcesada = (io, data) => {
         timestamp: new Date().toISOString()
       });
       
-      // ✅ También emitir alerta específica para el colaborador
+      // ✅ Alerta para el colaborador
       io.to(`emprendimiento_${data.emprendimiento_id}`).emit('nueva_alerta', {
         id: `canje_${data.solicitud_id}`,
         tipo: 'canje',
-        titulo: data.estado === 'aprobado' ? '✅ Canje aprobado' : '❌ Canje rechazado',
+        titulo: data.estado === 'aprobado' ? '✅ Canje aprobado' : 
+                data.estado === 'completado' ? '🎁 Canje completado' : '❌ Canje rechazado',
         mensaje: data.mensaje || `Solicitud de canje ${data.estado}`,
-        icono: data.estado === 'aprobado' ? '✅' : '❌',
+        icono: data.estado === 'aprobado' ? '✅' : 
+               data.estado === 'completado' ? '🎁' : '❌',
         importante: true,
         fecha: new Date().toISOString(),
         detalle: {
@@ -354,10 +353,8 @@ const emitirNotificacionGeneral = (io, data) => {
       priority: data.priority || 'medium'
     };
 
-    // Emitir a administradores
     io.to('admin').emit('nueva_notificacion', notificacion);
 
-    // Si hay un usuario específico, emitir a su sala
     if (data.userId) {
       io.to(`user_${data.userId}`).emit('nueva_notificacion', notificacion);
     }
@@ -376,15 +373,12 @@ const emitirNotificacionGeneral = (io, data) => {
 // ============================================
 
 module.exports = (pool, ioParam) => {
-  // Asignar io global
   io = ioParam;
   
-  // ✅ VERIFICACIÓN DE SOCKET.IO AL INICIO
   if (io) {
     console.log('✅ [SOCKET] Socket.io asignado correctamente al router de notificaciones');
     logger.info('✅ Socket.io asignado correctamente al router de notificaciones');
     
-    // ✅ Agregar evento de prueba para verificar conexión
     io.on('connection', (socket) => {
       console.log('🔌 [SOCKET] Nuevo cliente conectado al router de notificaciones');
       
@@ -428,11 +422,9 @@ module.exports = (pool, ioParam) => {
   );
 
   // GET /lista-solicitudes - Obtener lista de solicitudes de canje (SOLO ADMIN)
-  // ✅ RATE LIMITER ELIMINADO para que aparezca automáticamente
   router.get('/lista-solicitudes',
     authenticate,
     authorize('admin'),
-    // createLimiter(5, 100), // ❌ ELIMINADO
     async (req, res) => {
       try {
         logger.info('GET /lista-solicitudes - Admin:', req.user.id);
@@ -487,9 +479,7 @@ module.exports = (pool, ioParam) => {
     }
   );
 
-  // ============================================
-  // ✅ NUEVO ENDPOINT: GET /emprendimientos - Obtener emprendimientos para el filtro
-  // ============================================
+  // GET /emprendimientos
   router.get('/emprendimientos',
     authenticate,
     authorize('admin'),
@@ -512,9 +502,7 @@ module.exports = (pool, ioParam) => {
     }
   );
 
-  // ============================================
-  // ✅ NUEVO ENDPOINT: GET /ventas - Obtener ventas con ganancia REAL
-  // ============================================
+  // GET /ventas
   router.get('/ventas',
     authenticate,
     authorize('admin'),
@@ -523,7 +511,6 @@ module.exports = (pool, ioParam) => {
       try {
         logger.info('GET /ventas - Admin:', req.user.id);
         
-        // Consulta para obtener ventas con items, emprendimiento y ganancia real
         const [ventas] = await pool.query(`
           SELECT 
             f.id,
@@ -559,7 +546,6 @@ module.exports = (pool, ioParam) => {
           ORDER BY f.fecha DESC, f.hora DESC
         `);
 
-        // Obtener items para cada factura
         const ventasConItems = await Promise.all(ventas.map(async (venta) => {
           const [items] = await pool.query(
             `SELECT 
@@ -696,7 +682,7 @@ module.exports = (pool, ioParam) => {
     }
   );
 
-  // GET /solicitudes-pendientes - Obtener solicitudes pendientes (SOLO ADMIN)
+  // GET /solicitudes-pendientes
   router.get('/solicitudes-pendientes',
     authenticate,
     authorize('admin'),
@@ -730,7 +716,7 @@ module.exports = (pool, ioParam) => {
     }
   );
 
-  // GET /premios-disponibles - Obtener premios disponibles (PÚBLICO)
+  // GET /premios-disponibles
   router.get('/premios-disponibles',
     createLimiter(5, 200),
     async (req, res) => {
@@ -751,7 +737,7 @@ module.exports = (pool, ioParam) => {
     }
   );
 
-  // POST /solicitar-canje - Crear solicitud de canje (REQUIERE AUTH)
+  // POST /solicitar-canje
   router.post('/solicitar-canje',
     authenticate,
     createLimiter(1, 30),
@@ -776,7 +762,6 @@ module.exports = (pool, ioParam) => {
           producto_nombre
         } = req.body;
         
-        // Verificar permisos
         if (req.user.rol !== 'admin' && req.user.id !== user_id) {
           await connection.rollback();
           return res.status(403).json({ success: false, message: 'No puedes solicitar canje para otro usuario' });
@@ -811,7 +796,6 @@ module.exports = (pool, ioParam) => {
         let departamentoFinal = departamento || null;
         let valorDineroFinal = null;
         
-        // Procesar según tipo de canje
         if (tipo_canje === 'efectivo') {
           if (puntos < 100) {
             await connection.rollback();
@@ -861,7 +845,6 @@ module.exports = (pool, ioParam) => {
           };
           
         } else if (tipo_canje === 'solo_puntos' || tipo_canje === 'mixto') {
-          // Canje de colaborador
           if (puntos > puntosActuales) {
             await connection.rollback();
             return res.status(400).json({ success: false, message: 'Puntos insuficientes' });
@@ -871,7 +854,6 @@ module.exports = (pool, ioParam) => {
           const config = await getConfigPuntos(pool);
           const montoDescuento = puntos * config.valor_punto;
           
-          // Obtener nombre del emprendimiento si no se proporcionó
           if (!empresaNombreFinal && emprendimiento_id) {
             const [emprendimiento] = await connection.query(
               'SELECT nombre FROM emprendimientos WHERE id = ?',
@@ -899,7 +881,6 @@ module.exports = (pool, ioParam) => {
           };
         }
         
-        // Insertar solicitud con todas las columnas
         const [solicitud] = await connection.query(
           `INSERT INTO solicitudes_canje 
            (user_id, emprendimiento_id, tipo_canje, premio_id, premio_nombre, 
@@ -956,9 +937,6 @@ module.exports = (pool, ioParam) => {
         
         await connection.commit();
         
-        // ✅ EMITIR EVENTOS DE SOCKET.IO CON VERIFICACIÓN MEJORADA
-        console.log(`📡 [SOCKET] Preparando emisión para solicitud ${solicitudId}`);
-        
         if (io) {
           const socketData = {
             solicitud_id: solicitudId,
@@ -974,7 +952,6 @@ module.exports = (pool, ioParam) => {
             mensaje: mensajeAdmin
           };
           
-          console.log('📡 [SOCKET] Datos a emitir:', JSON.stringify(socketData, null, 2));
           emitirNuevaSolicitud(io, socketData);
         } else {
           console.error('❌ [SOCKET] ¡io es null! No se pudo emitir el evento para solicitud', solicitudId);
@@ -1040,7 +1017,6 @@ module.exports = (pool, ioParam) => {
           return res.status(400).json({ success: false, message: 'El usuario ya no tiene suficientes puntos' });
         }
         
-        // Descontar stock si es premio
         if (solicitudData.tipo_canje === 'premio' && metadata.premio_id) {
           const [premio] = await connection.query(
             'SELECT stock FROM premios WHERE id = ? FOR UPDATE',
@@ -1058,19 +1034,16 @@ module.exports = (pool, ioParam) => {
           );
         }
         
-        // Descontar puntos
         const nuevosPuntos = puntosUser[0].puntos_totales - solicitudData.puntos_requeridos;
         await connection.query(
           'UPDATE user_puntos SET puntos_totales = ? WHERE user_id = ?',
           [nuevosPuntos, solicitudData.user_id]
         );
         
-        // Determinar tipo de transacción
         const esPagoMixto = solicitudData.tipo_canje === 'mixto' || metadata.tipo_pago === 'mixto';
         const esCanjeProducto = solicitudData.tipo_canje === 'producto' || metadata.producto_id || solicitudData.premio_id;
         const tipoTransaccion = esPagoMixto ? 'canje_mixto' : 'canje';
         
-        // Registrar transacción
         await connection.query(
           `INSERT INTO transacciones 
            (user_id, tipo, referencia, fecha, puntos, puntos_usados, estado, detalles, emprendimiento_id)
@@ -1092,7 +1065,6 @@ module.exports = (pool, ioParam) => {
           ]
         );
         
-        // Actualizar solicitud
         await connection.query(
           `UPDATE solicitudes_canje 
            SET estado = 'aprobado', fecha_procesamiento = NOW(), procesado_por = ?
@@ -1100,7 +1072,6 @@ module.exports = (pool, ioParam) => {
           [adminId, solicitudId]
         );
         
-        // Actualizar notificaciones relacionadas
         await connection.query(
           `UPDATE notificaciones 
            SET estado = 'aprobado', leida = 1, procesado_en = NOW(), procesado_por = ?
@@ -1108,22 +1079,28 @@ module.exports = (pool, ioParam) => {
           [adminId, solicitudId]
         );
         
-        // Generar mensaje de aprobación
+        // ============================================
+        // ✅ GENERAR MENSAJE DE APROBACIÓN
+        // ✅ Info de contacto SOLO para origen_soli === 'usuario'
+        // ============================================
+        const INFO_CONTACTO = ' Para coordinar la entrega, contáctanos al 0992852633 o edison.vargasp2025@gmail.com';
+        const esOrigenUsuario = (solicitudData.origen_soli || 'usuario') === 'usuario';
+        const sufijoContacto = esOrigenUsuario ? INFO_CONTACTO : '';
+        
         let mensajeAprobacion = '';
         if (tipoTransaccion === 'canje_mixto') {
           const montoEfectivo = metadata.monto_efectivo || 0;
           const montoDescuento = metadata.monto_descuento || (solicitudData.puntos_requeridos * config.valor_punto);
-          mensajeAprobacion = `✅ ¡Pago MIXTO aprobado! Canjeaste ${solicitudData.puntos_requeridos.toLocaleString()} puntos (USD $${montoDescuento.toFixed(2)}) + USD $${montoEfectivo} en efectivo.`;
+          mensajeAprobacion = `✅ ¡Pago MIXTO aprobado! Canjeaste ${solicitudData.puntos_requeridos.toLocaleString()} puntos (USD $${montoDescuento.toFixed(2)}) + USD $${montoEfectivo} en efectivo.${sufijoContacto}`;
         } else if (metadata.producto_nombre || solicitudData.premio_nombre) {
           const nombreProducto = metadata.producto_nombre || solicitudData.premio_nombre;
-          mensajeAprobacion = `✅ ¡Canje de producto aprobado! Recibiste "${nombreProducto}" por ${solicitudData.puntos_requeridos.toLocaleString()} puntos.`;
+          mensajeAprobacion = `✅ ¡Canje de producto aprobado! Recibiste "${nombreProducto}" por ${solicitudData.puntos_requeridos.toLocaleString()} puntos.${sufijoContacto}`;
         } else if (solicitudData.tipo_canje === 'efectivo') {
-          mensajeAprobacion = `✅ ¡Canje aprobado! Canjeaste ${solicitudData.puntos_requeridos.toLocaleString()} puntos por USD $${(solicitudData.puntos_requeridos * config.valor_punto).toFixed(2)}.`;
+          mensajeAprobacion = `✅ ¡Canje aprobado! Canjeaste ${solicitudData.puntos_requeridos.toLocaleString()} puntos por USD $${(solicitudData.puntos_requeridos * config.valor_punto).toFixed(2)}.${sufijoContacto}`;
         } else {
-          mensajeAprobacion = `✅ ¡Canje aprobado! Canjeaste ${solicitudData.puntos_requeridos.toLocaleString()} puntos.`;
+          mensajeAprobacion = `✅ ¡Canje aprobado! Canjeaste ${solicitudData.puntos_requeridos.toLocaleString()} puntos.${sufijoContacto}`;
         }
         
-        // Notificar al usuario
         await connection.query(
           `INSERT INTO notificaciones (user_id, cliente_id, solicitud_id, tipo, titulo, mensaje, importante, leida, estado, fecha)
            VALUES (?, ?, ?, 'sys', '🎉 Canje aprobado', ?, 1, 0, 'aprobado', NOW())`,
@@ -1132,10 +1109,8 @@ module.exports = (pool, ioParam) => {
         
         await connection.commit();
         
-        // ✅ OBTENER EMPRENDIMIENTO_ID PARA SOCKET
         const emprendimientoId = solicitudData.emprendimiento_id || metadata.emprendimiento_id || null;
         
-        // ✅ EMITIR EVENTOS DE SOCKET.IO CON VERIFICACIÓN - CORREGIDO
         if (io) {
           emitirSolicitudProcesada(io, {
             solicitud_id: solicitudId,
@@ -1146,10 +1121,9 @@ module.exports = (pool, ioParam) => {
             origen_soli: solicitudData.origen_soli || 'usuario',
             puntos: solicitudData.puntos_requeridos,
             mensaje: mensajeAprobacion,
-            emprendimiento_id: emprendimientoId  // ✅ AGREGADO
+            emprendimiento_id: emprendimientoId
           });
           
-          // Emitir actualización de puntos
           io.to(`user_${solicitudData.user_id}`).emit('puntos_actualizados', {
             user_id: solicitudData.user_id,
             puntos_totales: nuevosPuntos,
@@ -1177,7 +1151,103 @@ module.exports = (pool, ioParam) => {
     }
   );
 
-  // PUT /rechazar-solicitud/:solicitudId - Rechazar solicitud (SOLO ADMIN)
+  // PUT /completar-solicitud/:solicitudId
+  router.put('/completar-solicitud/:solicitudId',
+    authenticate,
+    authorize('admin'),
+    createLimiter(1, 20),
+    validateParams(solicitudIdParamSchema),
+    validate(validations.aprobarSolicitud),
+    async (req, res) => {
+      const connection = await pool.getConnection();
+      
+      try {
+        const { solicitudId } = req.params;
+        const { adminId } = req.body;
+        
+        logger.info(`PUT /completar-solicitud/${solicitudId} - Admin:`, adminId);
+        await connection.beginTransaction();
+        
+        const [solicitud] = await connection.query(
+          `SELECT sc.*, u.usuario, u.rol as user_rol
+           FROM solicitudes_canje sc
+           JOIN user u ON sc.user_id = u.id
+           WHERE sc.id = ? AND sc.estado = 'aprobado'`,
+          [solicitudId]
+        );
+        
+        if (solicitud.length === 0) {
+          await connection.rollback();
+          return res.status(400).json({ 
+            success: false, 
+            message: 'Solicitud no encontrada o no está en estado aprobado' 
+          });
+        }
+        
+        const solicitudData = solicitud[0];
+        const metadata = parseMetadata(solicitudData.metadata);
+        
+        await connection.query(
+          `UPDATE solicitudes_canje
+           SET estado = 'completado', fecha_procesamiento = NOW()
+           WHERE id = ?`,
+          [solicitudId]
+        );
+        
+        await connection.query(
+          `UPDATE notificaciones
+           SET estado = 'completado', leida = 1, procesado_en = NOW()
+           WHERE solicitud_id = ?`,
+          [solicitudId]
+        );
+        
+        const mensajeCompletado = solicitudData.tipo_canje === 'efectivo'
+          ? `🎁 Tu canje de ${solicitudData.puntos_requeridos.toLocaleString()} puntos ha sido COMPLETADO.`
+          : `🎁 Tu canje "${solicitudData.premio_nombre || metadata.producto_nombre || 'producto'}" ha sido COMPLETADO. ¡Disfrútalo!`;
+        
+        await connection.query(
+          `INSERT INTO notificaciones (user_id, cliente_id, solicitud_id, tipo, titulo, mensaje, importante, leida, estado, fecha)
+           VALUES (?, ?, ?, 'sys', '🎁 Canje completado', ?, 1, 0, 'completado', NOW())`,
+          [solicitudData.user_id, solicitudData.user_id, solicitudId, mensajeCompletado]
+        );
+        
+        await connection.commit();
+        
+        const emprendimientoId = solicitudData.emprendimiento_id || metadata.emprendimiento_id || null;
+        
+        if (io) {
+          emitirSolicitudProcesada(io, {
+            solicitud_id: solicitudId,
+            user_id: solicitudData.user_id,
+            estado: 'completado',
+            admin_id: adminId,
+            tipo_canje: solicitudData.tipo_canje,
+            origen_soli: solicitudData.origen_soli || 'usuario',
+            puntos: solicitudData.puntos_requeridos,
+            mensaje: mensajeCompletado,
+            emprendimiento_id: emprendimientoId
+          });
+          
+          console.log(`✅ [SOCKET] Eventos emitidos para completar solicitud ${solicitudId}`);
+        } else {
+          console.error(`❌ [SOCKET] io es null! No se pudieron emitir eventos para completar ${solicitudId}`);
+        }
+        
+        res.json({ 
+          success: true, 
+          message: 'Canje marcado como completado exitosamente'
+        });
+        
+      } catch (error) {
+        await connection.rollback();
+        handleError(error, `PUT completar-solicitud/${req.params.solicitudId}`, res);
+      } finally {
+        connection.release();
+      }
+    }
+  );
+
+  // PUT /rechazar-solicitud/:solicitudId
   router.put('/rechazar-solicitud/:solicitudId',
     authenticate,
     authorize('admin'),
@@ -1207,7 +1277,6 @@ module.exports = (pool, ioParam) => {
         const solicitudData = solicitud[0];
         const metadata = parseMetadata(solicitudData.metadata);
         
-        // Devolver stock si era canje de producto
         if (metadata.producto_id && solicitudData.tipo_canje !== 'efectivo') {
           await connection.query(
             `UPDATE productos SET stock = stock + 1 WHERE id = ?`,
@@ -1215,7 +1284,6 @@ module.exports = (pool, ioParam) => {
           );
         }
         
-        // Actualizar solicitud
         await connection.query(
           `UPDATE solicitudes_canje 
            SET estado = 'rechazado', fecha_procesamiento = NOW(), procesado_por = ?, motivo_rechazo = ?
@@ -1223,7 +1291,6 @@ module.exports = (pool, ioParam) => {
           [adminId, reason, solicitudId]
         );
         
-        // Actualizar notificaciones
         await connection.query(
           `UPDATE notificaciones 
            SET estado = 'rechazado', leida = 1, procesado_en = NOW(), procesado_por = ?, motivo_rechazo = ?
@@ -1247,10 +1314,8 @@ module.exports = (pool, ioParam) => {
         
         await connection.commit();
         
-        // ✅ OBTENER EMPRENDIMIENTO_ID PARA SOCKET
         const emprendimientoId = solicitudData.emprendimiento_id || metadata.emprendimiento_id || null;
         
-        // ✅ EMITIR EVENTOS DE SOCKET.IO CON VERIFICACIÓN - CORREGIDO
         if (io) {
           emitirSolicitudProcesada(io, {
             solicitud_id: solicitudId,
@@ -1262,7 +1327,7 @@ module.exports = (pool, ioParam) => {
             puntos: solicitudData.puntos_requeridos,
             mensaje: mensajeRechazo,
             motivo: reason,
-            emprendimiento_id: emprendimientoId  // ✅ AGREGADO
+            emprendimiento_id: emprendimientoId
           });
           
           console.log(`✅ [SOCKET] Eventos emitidos para rechazo de solicitud ${solicitudId}`);
@@ -1284,7 +1349,7 @@ module.exports = (pool, ioParam) => {
     }
   );
 
-  // GET /cliente-detalle/:nombre - Obtener detalles del cliente por nombre (SOLO ADMIN)
+  // GET /cliente-detalle/:nombre
   router.get('/cliente-detalle/:nombre',
     authenticate,
     authorize('admin'),
@@ -1326,7 +1391,7 @@ module.exports = (pool, ioParam) => {
     }
   );
 
-  // GET /usuario-detalle/:id - Obtener usuario por ID (SOLO ADMIN)
+  // GET /usuario-detalle/:id
   router.get('/usuario-detalle/:id',
     authenticate,
     authorize('admin'),
@@ -1368,7 +1433,7 @@ module.exports = (pool, ioParam) => {
     }
   );
 
-  // PUT /:id/read - Marcar notificación como leída (REQUIERE AUTH)
+  // PUT /:id/read
   router.put('/:id/read',
     authenticate,
     createLimiter(5, 100),
@@ -1380,7 +1445,6 @@ module.exports = (pool, ioParam) => {
         
         await pool.query(`UPDATE notificaciones SET leida = 1 WHERE id = ?`, [id]);
         
-        // ✅ EMITIR EVENTO DE SOCKET.IO
         if (io) {
           io.emit('notificacion_leida', {
             notificacion_id: id,
@@ -1396,7 +1460,7 @@ module.exports = (pool, ioParam) => {
     }
   );
 
-  // PUT /read-all - Marcar todas como leídas (REQUIERE AUTH)
+  // PUT /read-all
   router.put('/read-all',
     authenticate,
     createLimiter(5, 50),
@@ -1406,7 +1470,6 @@ module.exports = (pool, ioParam) => {
         
         await pool.query(`UPDATE notificaciones SET leida = 1 WHERE leida = 0`);
         
-        // ✅ EMITIR EVENTO DE SOCKET.IO
         if (io) {
           io.emit('todas_notificaciones_leidas', {
             usuario_id: req.user.id,
@@ -1421,9 +1484,7 @@ module.exports = (pool, ioParam) => {
     }
   );
 
-  // ============================================
-  // DELETE /:id - ELIMINAR NOTIFICACIÓN O SOLICITUD (CORREGIDO)
-  // ============================================
+  // DELETE /:id
   router.delete('/:id',
     authenticate,
     authorize('admin'),
@@ -1437,7 +1498,6 @@ module.exports = (pool, ioParam) => {
         let eliminado = false;
         let tipoEliminado = '';
         
-        // ✅ PRIMERO: Buscar en notificaciones
         const [notif] = await pool.query(`SELECT id FROM notificaciones WHERE id = ?`, [id]);
         if (notif.length > 0) {
           await pool.query(`DELETE FROM notificaciones WHERE id = ?`, [id]);
@@ -1446,11 +1506,9 @@ module.exports = (pool, ioParam) => {
           logger.info(`✅ Notificación ${id} eliminada`);
         }
         
-        // ✅ SEGUNDO: Buscar en solicitudes_canje
         if (!eliminado) {
           const [solicitud] = await pool.query(`SELECT id FROM solicitudes_canje WHERE id = ?`, [id]);
           if (solicitud.length > 0) {
-            // Eliminar notificaciones relacionadas primero
             await pool.query(
               `DELETE FROM notificaciones WHERE solicitud_id = ? OR JSON_EXTRACT(metadata, '$.solicitud_id') = ?`,
               [id, id]
@@ -1462,7 +1520,6 @@ module.exports = (pool, ioParam) => {
           }
         }
         
-        // ✅ TERCERO: Buscar en metadata de notificaciones
         if (!eliminado) {
           const [notifPorMetadata] = await pool.query(
             `SELECT id FROM notificaciones WHERE JSON_EXTRACT(metadata, '$.solicitud_id') = ?`,
@@ -1480,7 +1537,6 @@ module.exports = (pool, ioParam) => {
           return res.status(404).json({ success: false, message: 'Elemento no encontrado' });
         }
         
-        // ✅ EMITIR EVENTO DE SOCKET.IO
         if (io) {
           io.emit('notificacion_eliminada', {
             notificacion_id: id,
@@ -1498,7 +1554,7 @@ module.exports = (pool, ioParam) => {
     }
   );
 
-  // POST /enviar-admin - Enviar notificación a admin (SOLO ADMIN y COLAB)
+  // POST /enviar-admin
   router.post('/enviar-admin',
     authenticate,
     authorize('admin', 'colab'),
@@ -1532,7 +1588,6 @@ module.exports = (pool, ioParam) => {
           );
         }
         
-        // ✅ EMITIR EVENTO DE SOCKET.IO
         if (io) {
           emitirNotificacionGeneral(io, {
             id: Date.now(),

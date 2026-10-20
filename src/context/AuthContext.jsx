@@ -6,28 +6,88 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
+// ============================================
+// ✅ FUNCIONES AUXILIARES (NUEVAS)
+// ============================================
+
+// Decodifica el JWT sin librerías externas
+const decodeJWT = (token) => {
+  try {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload));
+  } catch {
+    return null;
+  }
+};
+
+// Verifica si el token expiró
+const isTokenExpired = (token) => {
+  const payload = decodeJWT(token);
+  if (!payload || !payload.exp) return true;
+  return payload.exp * 1000 < Date.now();
+};
+
+// Limpia todo el almacenamiento de sesión
+const clearSession = () => {
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
+  sessionStorage.removeItem("user");
+  sessionStorage.removeItem("token");
+};
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Hidratar sesión al iniciar
+  // ============================================
+  // Hidratar sesión al iniciar (con validación de expiración)
+  // ============================================
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const storedToken = localStorage.getItem("token");
-    
+
     if (storedUser && storedToken) {
-      try {
-        setUser(JSON.parse(storedUser));
-        setToken(storedToken);
-      } catch {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
+      // ✅ Validar expiración antes de aceptar el token
+      if (isTokenExpired(storedToken)) {
+        clearSession();
+      } else {
+        try {
+          setUser(JSON.parse(storedUser));
+          setToken(storedToken);
+        } catch {
+          clearSession();
+        }
       }
     }
     setLoading(false);
   }, []);
 
+  // ============================================
+  // ✅ DETECTAR RESTAURACIÓN DESDE BFCACHE
+  // (soluciona el problema de la flecha "adelante" del navegador)
+  // ============================================
+  useEffect(() => {
+    const handlePageShow = (event) => {
+      if (event.persisted) {
+        // La página se restauró desde bfcache
+        const storedToken = localStorage.getItem("token");
+
+        if (!storedToken || isTokenExpired(storedToken)) {
+          setUser(null);
+          setToken(null);
+          clearSession();
+        }
+      }
+    };
+
+    window.addEventListener("pageshow", handlePageShow);
+    return () => window.removeEventListener("pageshow", handlePageShow);
+  }, []);
+
+  // ============================================
+  // LOGIN
+  // ============================================
   const loginUser = (userData, authToken) => {
     setUser(userData);
     setToken(authToken);
@@ -35,11 +95,18 @@ export function AuthProvider({ children }) {
     localStorage.setItem("token", authToken);
   };
 
+  // ============================================
+  // ✅ LOGOUT ROBUSTO (fuerza salida y elimina bfcache)
+  // ============================================
   const logoutUser = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    clearSession();
     setUser(null);
     setToken(null);
+
+    // ✅ Forzar navegación completa → elimina bfcache y limpia estado en memoria
+    if (typeof window !== "undefined" && !window.location.pathname.includes("/login")) {
+      window.location.replace("/login");
+    }
   };
 
   // Función auxiliar para obtener headers con autenticación
@@ -89,6 +156,25 @@ export function AuthProvider({ children }) {
     return response;
   };
 
+  // ============================================
+  // ✅ BLOQUEO DE RENDER HASTA HIDRATAR
+  // (evita que los hijos hagan fetch con "Bearer null")
+  // ============================================
+  if (loading) {
+    return (
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        fontSize: "1rem",
+        color: "#666"
+      }}>
+        Cargando sesión...
+      </div>
+    );
+  }
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -98,7 +184,8 @@ export function AuthProvider({ children }) {
       logoutUser,
       getAuthHeaders,
       fetchWithAuth,
-      isAuthenticated: !!token
+      // ✅ isAuthenticated reactivo con validación de expiración
+      isAuthenticated: !!token && !isTokenExpired(token)
     }}>
       {children}
     </AuthContext.Provider>

@@ -6,9 +6,6 @@ import { signInWithPopup } from 'firebase/auth';
 import styles from '../assets/css/login.module.css';
 import { FcGoogle } from 'react-icons/fc';
 
-// ✅ Usar rutas relativas - el proxy de Nginx manejará la redirección
-const API_URL = ''; // Vacío para usar rutas relativas
-
 export default function Login() {
   const [usuario, setUsuario] = useState('');
   const [contra, setContra] = useState('');
@@ -57,12 +54,8 @@ export default function Login() {
       const data = await response.json();
 
       if (data.success && data.token) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        
-        if (loginUser) {
-          loginUser(data.user, data.token);
-        }
+        // ✅ Solo loginUser guarda (evita duplicación)
+        loginUser(data.user, data.token);
         
         if (data.user.rol === 'admin') {
           window.location.href = '/admin';
@@ -137,12 +130,8 @@ export default function Login() {
       const data = await response.json();
       
       if (data.success && data.token) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        
-        if (loginUser) {
-          loginUser(data.user, data.token);
-        }
+        // ✅ Solo loginUser guarda (evita duplicación)
+        loginUser(data.user, data.token);
         
         if (data.user.rol === 'admin') {
           window.location.href = '/admin';
@@ -228,6 +217,7 @@ export default function Login() {
           </div>
 
           <button
+            type="button"
             onClick={handleGoogleLogin}
             disabled={cargando}
             className={styles.googleButton}

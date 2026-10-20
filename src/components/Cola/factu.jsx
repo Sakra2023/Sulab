@@ -237,13 +237,13 @@ const FacturacionColab = () => {
   };
 
   // ============================================
-  // ✅ CARGAR DATOS DEL EMPRENDIMIENTO (URL relativa)
+  // CARGAR DATOS DEL EMPRENDIMIENTO
   // ============================================
   const cargarEmprendimiento = async () => {
     if (!verificarToken()) return;
 
     try {
-      const response = await fetch(`/api/colab/emprendimiento/propietario/${usuarioId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/colab/emprendimiento/propietario/${usuarioId}`, {
         headers: getAuthHeaders()
       });
 
@@ -262,14 +262,14 @@ const FacturacionColab = () => {
   };
 
   // ============================================
-  // ✅ FUNCIONES API PARA COMANDAS (URLs relativas)
+  // FUNCIONES API PARA COMANDAS
   // ============================================
 
   const cargarComandas = async () => {
     if (!verificarToken()) return;
 
     try {
-      const response = await fetch(`/api/factu/comandas/emprendimiento/${emprendimientoId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/comandas/emprendimiento/${emprendimientoId}`, {
         headers: getAuthHeaders()
       });
 
@@ -311,7 +311,7 @@ const FacturacionColab = () => {
     if (!verificarToken()) return null;
 
     try {
-      const response = await fetch(`/api/factu/comandas`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/comandas`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -347,7 +347,7 @@ const FacturacionColab = () => {
     if (!verificarToken()) return false;
 
     try {
-      const response = await fetch(`/api/factu/comandas/${comandaId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/comandas/${comandaId}`, {
         method: 'PUT',
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -375,7 +375,7 @@ const FacturacionColab = () => {
     if (!verificarToken()) return false;
 
     try {
-      const response = await fetch(`/api/factu/comandas/${comandaId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/comandas/${comandaId}`, {
         method: 'DELETE',
         headers: getAuthHeaders()
       });
@@ -394,14 +394,14 @@ const FacturacionColab = () => {
   };
 
   // ============================================
-  // ✅ CARGAR DATOS DESDE API (URLs relativas)
+  // CARGAR DATOS DESDE API
   // ============================================
 
   const cargarConfigPuntos = async () => {
     if (!verificarToken()) return;
 
     try {
-      const response = await fetch(`/api/factu/config-puntos`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/config-puntos`, {
         headers: getAuthHeaders()
       });
 
@@ -423,7 +423,7 @@ const FacturacionColab = () => {
     if (!verificarToken()) return;
 
     try {
-      const response = await fetch(`/api/factu/productos/emprendimiento/${emprendimientoId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/productos/emprendimiento/${emprendimientoId}`, {
         headers: getAuthHeaders()
       });
 
@@ -463,7 +463,7 @@ const FacturacionColab = () => {
     if (!verificarToken()) return;
 
     try {
-      const response = await fetch(`/api/factu/usuarios/rol/usuario`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/usuarios/rol/usuario`, {
         headers: getAuthHeaders()
       });
 
@@ -495,7 +495,7 @@ const FacturacionColab = () => {
     if (!verificarToken()) return;
 
     try {
-      const response = await fetch(`/api/factu/facturas/emprendimiento/${emprendimientoId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/facturas/emprendimiento/${emprendimientoId}`, {
         headers: getAuthHeaders()
       });
 
@@ -515,14 +515,13 @@ const FacturacionColab = () => {
   };
 
   // ============================================
-  // ✅ CONEXIÓN SOCKET.IO (URL relativa)
+  // CONEXIÓN SOCKET.IO
   // ============================================
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    const newSocket = io({
-      path: '/socket.io/',
+    const newSocket = io(import.meta.env.VITE_API_URL, {
       auth: { token },
       transports: ['websocket', 'polling']
     });
@@ -979,7 +978,7 @@ const FacturacionColab = () => {
     return vuelto >= 0 ? vuelto : 0;
   };
 
-  // ✅ CORRECCIÓN: Ver PDF de la factura en modal usando blob URL para evitar X-Frame-Options (URL relativa)
+  // ✅ CORRECCIÓN: Ver PDF de la factura en modal usando blob URL para evitar X-Frame-Options
   const verPDFFactura = async (factura) => {
     if (factura && factura.ruta_pdf) {
       setPdfError(false);
@@ -991,7 +990,7 @@ const FacturacionColab = () => {
         rutaLimpia = rutaLimpia.substring(1);
       }
 
-      const pdfUrlCompleta = `/${rutaLimpia}`;
+      const pdfUrlCompleta = `${import.meta.env.VITE_API_URL}/${rutaLimpia}`;
 
       try {
         const response = await fetch(pdfUrlCompleta, {
@@ -1043,7 +1042,7 @@ const FacturacionColab = () => {
   };
 
   // ============================================
-  // ✅ NUEVA FUNCIÓN: Enviar email con barra de progreso (URL relativa)
+  // 📧 NUEVA FUNCIÓN: Enviar email con barra de progreso
   // ============================================
   const enviarFacturaEmail = async () => {
     if (!verificarToken()) return;
@@ -1085,7 +1084,7 @@ const FacturacionColab = () => {
       setProgresoEmail(50);
       setMensajeEmail('Enviando email...');
 
-      const response = await fetch(`/api/factu/enviar-factura`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/enviar-factura`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -1125,7 +1124,7 @@ const FacturacionColab = () => {
   };
 
   // ============================================
-  // 🔥 PROCESAR PAGO CON MODAL DE PROGRESO Y PUNTOS CON PROMOCIÓN (URL relativa)
+  // 🔥 PROCESAR PAGO CON MODAL DE PROGRESO Y PUNTOS CON PROMOCIÓN
   // ============================================
   const procesarPago = async () => {
     if (!verificarToken()) return;
@@ -1200,7 +1199,7 @@ const FacturacionColab = () => {
       setProgreso(30);
       setMensajeProceso('Enviando factura al servidor...');
 
-      const response = await fetch(`/api/factu/facturas`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/facturas`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(nuevaFacturaCompleta)

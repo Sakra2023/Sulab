@@ -551,6 +551,37 @@ export default function Noti() {
     }
   };
 
+  // ✅ NUEVA FUNCIÓN: Completar solicitud (aprobado → completado)
+  const completeRequest = async (id) => {
+    if (!window.confirm('¿Marcar este canje como COMPLETADO? Esto indica que el premio/producto ya fue entregado.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/notificaciones/completar-solicitud/${id}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ adminId: 1 })
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        alert(`⚠️ ${result.message || 'Error al completar'}`);
+        return;
+      }
+
+      actualizarSolicitud(id, { 
+        estado: 'completado',
+        fecha_procesamiento: new Date().toISOString()
+      });
+      alert('🎁 Canje marcado como completado');
+      setModalVisible(false);
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al completar');
+    }
+  };
+
   // Rechazar solicitud
   const rejectRequest = async (id) => {
     const solicitud = (solicitudes || []).find(s => s.id === id);
@@ -1097,6 +1128,27 @@ export default function Noti() {
                   <button onClick={() => rejectRequest(solicitudModal.originalId)} className={styles.rejectBtn}>❌ Rechazar</button>
                 </>
               )}
+
+              {/* ✅ NUEVO: Botón Completar cuando la solicitud está aprobada */}
+              {solicitudModal.estado === 'aprobado' && (
+                <button 
+                  onClick={() => completeRequest(solicitudModal.originalId)} 
+                  className={styles.completeBtn}
+                  style={{
+                    backgroundColor: '#3b82f6',
+                    color: 'white',
+                    padding: '0.6rem 1.2rem',
+                    border: 'none',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontWeight: '600',
+                    marginRight: '0.5rem'
+                  }}
+                >
+                  🎁 Marcar como Completado
+                </button>
+              )}
+
               <button 
                 onClick={() => {
                   deleteNotification(solicitudModal.id, solicitudModal.type);

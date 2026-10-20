@@ -282,7 +282,9 @@ class MetricsService {
             s.premio_nombre, 
             s.tipo_canje, 
             s.metadata,
-            s.emprendimiento_id
+            s.emprendimiento_id,
+            s.empresa_nombre,
+            s.origen_soli
           FROM solicitudes_canje s
           WHERE s.emprendimiento_id = ? 
           ORDER BY FIELD(s.estado, 'pendiente', 'aprobado', 'completado'), s.fecha_solicitud DESC
@@ -313,8 +315,17 @@ class MetricsService {
           }
           
           const puntosSolicitados = Math.abs(solicitud.puntos_usados || 0);
-          const producto = solicitud.premio_nombre || 'Producto';
+          const producto = solicitud.premio_nombre || detalleInfo.producto_nombre || 'Producto';
           const tipoPago = solicitud.tipo_canje || 'puntos';
+          
+          // ✅ NUEVO: Calcular info extra del canje
+          const montoEfectivo = parseFloat(detalleInfo.monto_efectivo) || 0;
+          const montoDescuento = parseFloat(detalleInfo.monto_descuento) || 0;
+          const valorPunto = parseFloat(detalleInfo.valor_punto) || 0.005;
+          const valorEnDinero = parseFloat((puntosSolicitados * valorPunto).toFixed(2));
+          const esMixto = tipoPago === 'mixto' || detalleInfo.tipo_pago === 'mixto';
+          const origenSoli = solicitud.origen_soli || detalleInfo.origen_soli || 'usuario';
+          const empresaNombre = solicitud.empresa_nombre || detalleInfo.nombre_tienda || null;
           
           let mensaje = '';
           let titulo = '';
@@ -326,24 +337,33 @@ class MetricsService {
               titulo = '⏳ Nueva solicitud de canje';
               importante = true;
               icono = '⏳';
-              if (tipoPago === 'mixto') {
-                const montoEfectivo = detalleInfo.monto_efectivo || 0;
-                mensaje = `${nombreUsuario} solicita PAGO MIXTO: ${puntosSolicitados} puntos + $${montoEfectivo} USD en efectivo - ${producto}`;
+              if (esMixto) {
+                mensaje = `${nombreUsuario} solicita PAGO MIXTO: ${puntosSolicitados} puntos (USD $${valorEnDinero}) + USD $${montoEfectivo} en efectivo - Producto: ${producto}`;
               } else {
-                mensaje = `${nombreUsuario} solicita canjear ${puntosSolicitados} puntos por "${producto}"`;
+                mensaje = `${nombreUsuario} solicita canjear ${puntosSolicitados} puntos (USD $${valorEnDinero}) por "${producto}"`;
               }
               break;
             case 'aprobado':
               titulo = '✅ Canje aprobado';
               importante = false;
               icono = '✅';
-              mensaje = `La solicitud de ${nombreUsuario} por ${puntosSolicitados} puntos (${producto}) ha sido APROBADA`;
+              if (esMixto) {
+                mensaje = `PAGO MIXTO de ${nombreUsuario} APROBADO: ${puntosSolicitados} puntos (USD $${valorEnDinero}) + USD $${montoEfectivo} en efectivo - Producto: ${producto}`;
+              } else if (producto && producto !== 'Producto') {
+                mensaje = `Canje de ${nombreUsuario} APROBADO: "${producto}" por ${puntosSolicitados} puntos (USD $${valorEnDinero})`;
+              } else {
+                mensaje = `Canje de ${nombreUsuario} APROBADO: ${puntosSolicitados} puntos (USD $${valorEnDinero})`;
+              }
               break;
             case 'completado':
               titulo = '🎉 Canje completado';
               importante = false;
               icono = '🎉';
-              mensaje = `El canje de ${nombreUsuario} por ${puntosSolicitados} puntos (${producto}) ha sido COMPLETADO`;
+              if (esMixto) {
+                mensaje = `PAGO MIXTO de ${nombreUsuario} COMPLETADO: ${puntosSolicitados} puntos + USD $${montoEfectivo} en efectivo - ${producto}`;
+              } else {
+                mensaje = `El canje de ${nombreUsuario} por ${puntosSolicitados} puntos (${producto}) ha sido COMPLETADO`;
+              }
               break;
             default:
               titulo = '📢 Solicitud de canje';
@@ -364,8 +384,12 @@ class MetricsService {
               email: emailUsuario,
               puntos: puntosSolicitados,
               producto: producto,
-              tipo_pago: tipoPago,
-              monto_efectivo: detalleInfo.monto_efectivo || 0,
+              tipo_pago: esMixto ? 'mixto' : tipoPago,
+              origen_soli: origenSoli,
+              monto_efectivo: montoEfectivo,
+              monto_descuento: montoDescuento,
+              valor_en_dinero: valorEnDinero,
+              empresa_nombre: empresaNombre,
               estado: solicitud.estado
             }
           });

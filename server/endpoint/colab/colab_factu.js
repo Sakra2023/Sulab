@@ -7,7 +7,7 @@ const cache = require('memory-cache');
 const nodemailer = require('nodemailer');
 const path = require('path');
 const fs = require('fs');
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer'); // ✅ CAMBIO: antes puppeteer-core
 const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 
@@ -31,12 +31,35 @@ let browserPool = null;
 let browserPoolUsage = 0;
 const BROWSER_POOL_MAX = 10;
 
+// ✅ CAMBIO: getBrowser simplificado y compatible con puppeteer completo
 const getBrowser = async () => {
   if (!browserPool) {
-    browserPool = await puppeteer.launch({
+    const launchOptions = {
       headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-    });
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--no-first-run'
+      ]
+    };
+
+    // Solo usar executablePath si está definido en .env
+    if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+      launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+      logger.info(`🚀 Puppeteer usando: ${process.env.PUPPETEER_EXECUTABLE_PATH}`);
+    } else {
+      logger.info('🚀 Puppeteer usando Chromium embebido');
+    }
+
+    try {
+      browserPool = await puppeteer.launch(launchOptions);
+      logger.info('✅ Navegador Puppeteer lanzado');
+    } catch (error) {
+      logger.error('❌ Error lanzando Puppeteer:', error);
+      throw error;
+    }
   }
   browserPoolUsage++;
   return browserPool;
@@ -766,7 +789,7 @@ module.exports = (pool, ioParam) => {
   );
 
   // ============================================
-  // 📧 POST /enviar-factura - Enviar factura por email (CORREGIDO)
+  // 📧 POST /enviar-factura - Enviar factura por email CON PDF ADJUNTO
   // ============================================
   router.post('/enviar-factura',
     authenticate,
@@ -774,38 +797,91 @@ module.exports = (pool, ioParam) => {
     async (req, res) => {
       try {
         const { factura, datosCliente, numeroFactura, emprendimiento } = req.body;
-        
+
         if (!factura || !numeroFactura) {
           return res.status(400).json({ success: false, message: 'Datos incompletos' });
         }
-        
+
         const emailCliente = datosCliente?.email || factura.cliente_email || factura.clienteEmail;
-        
+
         if (!emailCliente) {
           return res.status(400).json({ success: false, message: 'El cliente no tiene email registrado' });
         }
-        
-        // ✅ Usar credenciales con fallback
+
         const emailUser = process.env.EMAIL_USER || process.env.SMTP_USERNAME;
         const emailPass = process.env.EMAIL_PASS || process.env.SMTP_PASSWORD;
-        
+
         if (!emailUser || !emailPass) {
           return res.status(500).json({ success: false, message: 'Email no configurado' });
         }
-        
+
         const htmlContent = generarHTMLFactura(factura, datosCliente, numeroFactura, emprendimiento);
-        
+
+        // ✅ NUEVO: generar PDF adjunto (sin afectar el flujo original)
+        const attachments = [];
+        let nombreArchivoPDF = null;
+
+        try {
+          const facturaParaPDF = {
+            ...factura,
+            items: factura.items || [],
+            fecha: factura.fecha || new Date().toISOString(),
+            hora: factura.hora || '',
+            subtotal: factura.subtotal || 0,
+            impuesto: factura.impuesto || 0,
+            total: factura.total || 0,
+            metodo_pago: factura.metodoPago || factura.metodo_pago || 'efectivo',
+            pago_recibido: factura.pagoRecibido || factura.pago_recibido || 0,
+            vuelto: factura.vuelto || 0,
+            puntos_otorgados: factura.puntosOtorgados || factura.puntos_otorgados || 0
+          };
+
+          const htmlPDF = generarHTMLFactura(facturaParaPDF, datosCliente, numeroFactura, emprendimiento);
+
+          const browser = await getBrowser();
+          const page = await browser.newPage();
+          await page.setContent(htmlPDF, { waitUntil: 'networkidle0', timeout: 30000 });
+
+          const pdfBuffer = await page.pdf({
+            format: 'A4',
+            printBackground: true,
+            margin: { top: '0mm', right: '0mm', bottom: '0mm', left: '0mm' }
+          });
+
+          await page.close();
+          browserPoolUsage--;
+          await closeBrowser();
+
+          nombreArchivoPDF = `Factura_${numeroFactura.replace(/\//g, '_')}.pdf`;
+          attachments.push({
+            filename: nombreArchivoPDF,
+            content: pdfBuffer,
+            contentType: 'application/pdf'
+          });
+
+          logger.info(`📎 PDF generado en memoria para adjuntar: ${nombreArchivoPDF}`);
+        } catch (pdfError) {
+          // Si falla el PDF, se envía solo el HTML (no rompemos el flujo original)
+          logger.warn('⚠️ No se pudo generar el PDF adjunto, se enviará solo HTML:', pdfError.message);
+        }
+
         const mailOptions = {
           from: emailUser,
           to: emailCliente,
           subject: `Comprobante de Venta ${numeroFactura} - ${emprendimiento?.nombre || 'Mi Tienda'}`,
-          html: htmlContent
+          html: htmlContent,
+          attachments // ✅ Se adjunta el PDF (si se generó)
         };
-        
+
         await transporter.sendMail(mailOptions);
-        logger.info(`Comprobante de Venta ${numeroFactura} enviado a ${emailCliente}`);
-        
-        res.json({ success: true, message: 'Comprobante de venta enviado exitosamente' });
+        logger.info(`Comprobante ${numeroFactura} enviado a ${emailCliente}${attachments.length ? ' con PDF adjunto' : ' (solo HTML)'}`);
+
+        res.json({
+          success: true,
+          message: 'Comprobante enviado exitosamente',
+          adjunto_pdf: attachments.length > 0,
+          nombre_archivo: nombreArchivoPDF
+        });
       } catch (error) {
         handleError(error, 'POST enviar-factura', res);
       }

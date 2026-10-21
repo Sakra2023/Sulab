@@ -50,7 +50,8 @@ export default function NotificacionesUsuario() {
 
     console.log('🔌 Conectando socket notificaciones...');
     
-    socketRef.current = io(import.meta.env.VITE_API_URL, {
+    // ✅ CORRECCIÓN: Conexión a Socket.io usando ruta relativa
+    socketRef.current = io('/', {
       transports: ['websocket'],
       auth: { token: token },
       query: { userId: user.id }
@@ -156,7 +157,8 @@ export default function NotificacionesUsuario() {
     try {
       console.log('🔍 Cargando notificaciones para usuario ID:', user.id);
       
-      const response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/usuario/${user.id}/notificaciones?limite=50`);
+      // ✅ CORRECCIÓN: fetch con ruta relativa
+      const response = await fetchWithAuth(`/api/usuario/${user.id}/notificaciones?limite=50`);
       
       if (response.status === 403) {
         console.error('❌ Error 403: Token inválido o expirado');
@@ -359,7 +361,8 @@ export default function NotificacionesUsuario() {
     if (!window.confirm('¿Eliminar esta notificación?')) return;
     
     try {
-      const response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/usuario/${user.id}/notificaciones/${id}`, {
+      // ✅ CORRECCIÓN: fetch con ruta relativa
+      const response = await fetchWithAuth(`/api/usuario/${user.id}/notificaciones/${id}`, {
         method: 'DELETE'
       });
       
@@ -386,7 +389,8 @@ export default function NotificacionesUsuario() {
   // Marcar como leída
   const marcarComoLeida = async (id) => {
     try {
-      const response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/usuario/${user.id}/notificaciones/${id}/leer`, {
+      // ✅ CORRECCIÓN: fetch con ruta relativa
+      const response = await fetchWithAuth(`/api/usuario/${user.id}/notificaciones/${id}/leer`, {
         method: 'PUT'
       });
       

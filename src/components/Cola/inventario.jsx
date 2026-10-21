@@ -76,8 +76,8 @@ export default function InventarioColab() {
     const token = localStorage.getItem('token');
     if (!token || !emprendimientoId) return;
 
-    const newSocket = io({
-      path: '/socket.io/',
+    // ✅ CORRECCIÓN: Conexión a Socket.io usando ruta relativa
+    const newSocket = io('/', {
       auth: { token },
       transports: ['websocket', 'polling']
     });

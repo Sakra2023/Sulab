@@ -130,12 +130,14 @@ export default function PuntosColab() {
     if (!verificarToken()) return;
     
     const token = localStorage.getItem('token');
-    const newSocket = io({
-      path: '/socket.io/',
+    
+    // ✅ CORRECCIÓN: Conexión a Socket.io usando ruta relativa
+    const newSocket = io('/', {
       withCredentials: true,
       transports: ['websocket', 'polling'],
       auth: { token }
     });
+    
     setSocket(newSocket);
 
     newSocket.on('connect', () => {

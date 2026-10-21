@@ -89,12 +89,10 @@ export default function DashboardColab() {
     const token = localStorage.getItem('token');
     const empId = emprendimiento.id;
 
-    socketRef.current = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:3000', {
-      cors: {
-        origin: "http://localhost:5173",
-        methods: ["GET", "POST"],
-        credentials: true
-      },
+    // ✅ CORRECCIÓN: Conexión a Socket.io usando ruta relativa para que Nginx haga el proxy
+    socketRef.current = io('/', {
+      transports: ['websocket'],
+      autoConnect: true,
       auth: { token }
     });
 
@@ -104,7 +102,8 @@ export default function DashboardColab() {
       socketRef.current.emit('join_room', `user_${usuarioId}`);
 
       try {
-        await fetch(`${import.meta.env.VITE_API_URL}/api/colab/unirse-sala`, {
+        // ✅ CORRECCIÓN: fetch con ruta relativa
+        await fetch(`/api/colab/unirse-sala`, {
           method: 'POST',
           headers: getAuthHeaders(),
           body: JSON.stringify({ socketId: socketRef.current.id })
@@ -224,8 +223,9 @@ export default function DashboardColab() {
     if (!verificarToken()) return null;
 
     try {
+      // ✅ CORRECCIÓN: fetch con ruta relativa
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/colab/emprendimiento/propietario/${usuarioId}?_=${Date.now()}`,
+        `/api/colab/emprendimiento/propietario/${usuarioId}?_=${Date.now()}`,
         { headers: getAuthHeaders() }
       );
 
@@ -264,11 +264,11 @@ export default function DashboardColab() {
     try {
       let url;
 
-      // ✅ Si está en modo personalizado y tiene fechas válidas
+      // ✅ CORRECCIÓN: fetch con ruta relativa
       if (modoPersonalizado && fechaInicio && fechaFin) {
-        url = `${import.meta.env.VITE_API_URL}/api/colab/metricas/${id}?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&_=${Date.now()}`;
+        url = `/api/colab/metricas/${id}?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&_=${Date.now()}`;
       } else {
-        url = `${import.meta.env.VITE_API_URL}/api/colab/metricas/${id}?periodo=${periodo}&_=${Date.now()}`;
+        url = `/api/colab/metricas/${id}?periodo=${periodo}&_=${Date.now()}`;
       }
 
       const response = await fetch(url, { headers: getAuthHeaders() });
@@ -296,8 +296,9 @@ export default function DashboardColab() {
     if (!verificarToken()) return;
 
     try {
+      // ✅ CORRECCIÓN: fetch con ruta relativa
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/colab/alertas/${id}?_=${Date.now()}`,
+        `/api/colab/alertas/${id}?_=${Date.now()}`,
         { headers: getAuthHeaders() }
       );
 
@@ -358,8 +359,9 @@ export default function DashboardColab() {
     setAlertas(prev => prev.filter(a => a.id !== alertaId));
 
     try {
+      // ✅ CORRECCIÓN: fetch con ruta relativa
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/colab/alertas/${id}?tipo=${tipo}&_=${Date.now()}`,
+        `/api/colab/alertas/${id}?tipo=${tipo}&_=${Date.now()}`,
         {
           method: 'DELETE',
           headers: getAuthHeaders()
@@ -439,8 +441,9 @@ export default function DashboardColab() {
     setMensaje(null);
 
     try {
+      // ✅ CORRECCIÓN: fetch con ruta relativa
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/colab/emprendimiento/${emprendimiento.id}?_=${Date.now()}`,
+        `/api/colab/emprendimiento/${emprendimiento.id}?_=${Date.now()}`,
         {
           method: 'PUT',
           headers: getAuthHeaders(),
@@ -485,8 +488,9 @@ export default function DashboardColab() {
     if (!verificarToken()) return;
 
     try {
+      // ✅ CORRECCIÓN: fetch con ruta relativa
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/colab/alertas/${id}/leida?_=${Date.now()}`,
+        `/api/colab/alertas/${id}/leida?_=${Date.now()}`,
         {
           method: 'PUT',
           headers: getAuthHeaders(),
@@ -522,8 +526,9 @@ export default function DashboardColab() {
     if (!verificarToken()) return;
 
     try {
+      // ✅ CORRECCIÓN: fetch con ruta relativa
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/colab/alertas/marcar-todas?_=${Date.now()}`,
+        `/api/colab/alertas/marcar-todas?_=${Date.now()}`,
         {
           method: 'PUT',
           headers: getAuthHeaders(),
@@ -556,8 +561,6 @@ export default function DashboardColab() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // ✅ No hacemos trim aquí para no molestar al usuario mientras escribe;
-    // el trim se aplica al enviar el formulario.
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 

@@ -243,7 +243,8 @@ const FacturacionColab = () => {
     if (!verificarToken()) return;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/colab/emprendimiento/propietario/${usuarioId}`, {
+      // ✅ CORRECCIÓN: ruta relativa
+      const response = await fetch(`/api/colab/emprendimiento/propietario/${usuarioId}`, {
         headers: getAuthHeaders()
       });
 
@@ -269,7 +270,8 @@ const FacturacionColab = () => {
     if (!verificarToken()) return;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/comandas/emprendimiento/${emprendimientoId}`, {
+      // ✅ CORRECCIÓN: ruta relativa
+      const response = await fetch(`/api/factu/comandas/emprendimiento/${emprendimientoId}`, {
         headers: getAuthHeaders()
       });
 
@@ -311,7 +313,8 @@ const FacturacionColab = () => {
     if (!verificarToken()) return null;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/comandas`, {
+      // ✅ CORRECCIÓN: ruta relativa
+      const response = await fetch(`/api/factu/comandas`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -347,7 +350,8 @@ const FacturacionColab = () => {
     if (!verificarToken()) return false;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/comandas/${comandaId}`, {
+      // ✅ CORRECCIÓN: ruta relativa
+      const response = await fetch(`/api/factu/comandas/${comandaId}`, {
         method: 'PUT',
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -375,7 +379,8 @@ const FacturacionColab = () => {
     if (!verificarToken()) return false;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/comandas/${comandaId}`, {
+      // ✅ CORRECCIÓN: ruta relativa
+      const response = await fetch(`/api/factu/comandas/${comandaId}`, {
         method: 'DELETE',
         headers: getAuthHeaders()
       });
@@ -401,7 +406,8 @@ const FacturacionColab = () => {
     if (!verificarToken()) return;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/config-puntos`, {
+      // ✅ CORRECCIÓN: ruta relativa
+      const response = await fetch(`/api/factu/config-puntos`, {
         headers: getAuthHeaders()
       });
 
@@ -423,7 +429,8 @@ const FacturacionColab = () => {
     if (!verificarToken()) return;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/productos/emprendimiento/${emprendimientoId}`, {
+      // ✅ CORRECCIÓN: ruta relativa
+      const response = await fetch(`/api/factu/productos/emprendimiento/${emprendimientoId}`, {
         headers: getAuthHeaders()
       });
 
@@ -463,7 +470,8 @@ const FacturacionColab = () => {
     if (!verificarToken()) return;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/usuarios/rol/usuario`, {
+      // ✅ CORRECCIÓN: ruta relativa
+      const response = await fetch(`/api/factu/usuarios/rol/usuario`, {
         headers: getAuthHeaders()
       });
 
@@ -495,7 +503,8 @@ const FacturacionColab = () => {
     if (!verificarToken()) return;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/facturas/emprendimiento/${emprendimientoId}`, {
+      // ✅ CORRECCIÓN: ruta relativa
+      const response = await fetch(`/api/factu/facturas/emprendimiento/${emprendimientoId}`, {
         headers: getAuthHeaders()
       });
 
@@ -521,7 +530,8 @@ const FacturacionColab = () => {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    const newSocket = io(import.meta.env.VITE_API_URL, {
+    // ✅ CORRECCIÓN: Conexión a Socket.io usando ruta relativa
+    const newSocket = io('/', {
       auth: { token },
       transports: ['websocket', 'polling']
     });
@@ -990,7 +1000,8 @@ const FacturacionColab = () => {
         rutaLimpia = rutaLimpia.substring(1);
       }
 
-      const pdfUrlCompleta = `${import.meta.env.VITE_API_URL}/${rutaLimpia}`;
+      // ✅ CORRECCIÓN: ruta relativa
+      const pdfUrlCompleta = `/${rutaLimpia}`;
 
       try {
         const response = await fetch(pdfUrlCompleta, {
@@ -1084,7 +1095,8 @@ const FacturacionColab = () => {
       setProgresoEmail(50);
       setMensajeEmail('Enviando email...');
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/enviar-factura`, {
+      // ✅ CORRECCIÓN: ruta relativa
+      const response = await fetch(`/api/factu/enviar-factura`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -1199,7 +1211,8 @@ const FacturacionColab = () => {
       setProgreso(30);
       setMensajeProceso('Enviando factura al servidor...');
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/factu/facturas`, {
+      // ✅ CORRECCIÓN: ruta relativa
+      const response = await fetch(`/api/factu/facturas`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(nuevaFacturaCompleta)

@@ -30,28 +30,28 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     // Validaciones
     if (!formData.usuario || !formData.correo || !formData.contra) {
       setError('Todos los campos son obligatorios');
       return;
     }
-    
+
     if (!/\S+@\S+\.\S+/.test(formData.correo)) {
       setError('Formato de correo electrónico inválido');
       return;
     }
-    
+
     if (formData.contra.length < 3) {
       setError('La contraseña debe tener al menos 3 caracteres');
       return;
     }
-    
+
     if (!aceptaTerminos) {
       setError('Debes aceptar los Términos y Condiciones');
       return;
     }
-    
+
     setCargando(true);
 
     try {
@@ -85,28 +85,21 @@ export default function Register() {
 
   const handleGoogleRegister = async () => {
     setError('');
-    
+
     if (!aceptaTerminos) {
       setError('Debes aceptar los Términos y Condiciones');
       return;
     }
-    
+
     setCargando(true);
-    
+
     try {
       console.log("🚀 Iniciando registro con Google...");
-      
+
       // Iniciar sesión con Google popup
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-      
-      console.log("✅ Usuario de Google:", {
-        email: user.email,
-        displayName: user.displayName,
-        uid: user.uid,
-        photoURL: user.photoURL
-      });
-      
+
       // Preparar datos para enviar al backend
       const userData = {
         nombreCompleto: user.displayName,
@@ -116,13 +109,13 @@ export default function Register() {
         photoURL: user.photoURL,
         aceptaTerminos: true
       };
-      
+
       console.log("📤 Enviando datos al backend:", userData);
-      
-      // ✅ Usar ruta relativa /api/google (Nginx proxy)
-      const response = await fetch('/api/google', {
+
+      // ✅ RUTA CORREGIDA: /api/registro/google
+      const response = await fetch('/api/registro/google', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(userData)
@@ -130,16 +123,30 @@ export default function Register() {
 
       const data = await response.json();
       console.log("📥 Respuesta del backend:", data);
-      
-      if (data.success) {
-        alert('Registro con Google exitoso. Ahora puedes iniciar sesión.');
-        navigate('/login');
+
+      if (data.success && data.token) {
+        // ✅ Loguear al usuario directamente en lugar de mandarlo al login
+        // NOTA: Asegúrate de tener: const { loginUser } = useAuth(); arriba en tu componente
+        if (typeof loginUser === 'function') {
+          loginUser(data.user, data.token);
+        }
+
+        alert('¡Registro con Google exitoso! Bienvenido.');
+
+        // Redirigir según el rol
+        if (data.user.rol === 'admin') {
+          window.location.href = '/admin';
+        } else if (data.user.rol === 'colab') {
+          window.location.href = '/Colab';
+        } else {
+          window.location.href = '/usuario';
+        }
       } else {
         setError(data.message || 'Error al registrarse con Google');
       }
     } catch (err) {
       console.error('❌ Error en registro con Google:', err);
-      
+
       // Manejar errores específicos de Firebase
       if (err.code === 'auth/popup-closed-by-user') {
         setError('Ventana de Google cerrada. Por favor, intenta de nuevo.');
@@ -148,7 +155,8 @@ export default function Register() {
       } else if (err.code === 'auth/unauthorized-domain') {
         setError('Dominio no autorizado. Verifica la configuración de Firebase.');
       } else {
-        setError('Error al registrarse con Google: ' + (err.message || 'Error desconocido'));
+        // Este error puede ser si la respuesta no es JSON (ej. error 404 de Nginx)
+        setError('Error al registrarse con Google. Revisa la consola para más detalles.');
       }
     } finally {
       setCargando(false);
@@ -158,9 +166,9 @@ export default function Register() {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Crear Cuenta</h2>
-      
+
       {error && <div className={styles.error}>{error}</div>}
-      
+
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <label>Nombres:</label>
@@ -174,7 +182,7 @@ export default function Register() {
             className={styles.input}
           />
         </div>
-        
+
         <div className={styles.formGroup}>
           <label>Correo electrónico:</label>
           <input
@@ -187,7 +195,7 @@ export default function Register() {
             className={styles.input}
           />
         </div>
-        
+
         <div className={styles.formGroup}>
           <label>Contraseña:</label>
           <input
@@ -200,7 +208,7 @@ export default function Register() {
             className={styles.input}
           />
         </div>
-        
+
         <div className={styles.formGroup}>
           <label className={styles.checkboxLabel}>
             <input
@@ -211,9 +219,9 @@ export default function Register() {
             Acepto los <Link to="/terminos" target="_blank" className={styles.link}>Términos y Condiciones</Link>
           </label>
         </div>
-        
-        <button 
-          type="submit" 
+
+        <button
+          type="submit"
           disabled={cargando}
           className={cargando ? styles.buttonDisabled : styles.button}
         >
@@ -233,7 +241,7 @@ export default function Register() {
         <FcGoogle className={styles.googleIcon} />
         Google
       </button>
-      
+
       <div className={styles.linkContainer}>
         <p>¿Ya tienes cuenta? <Link to="/login" className={styles.link}>Inicia sesión aquí</Link></p>
         <p><Link to="/" className={styles.link}>← Volver al inicio</Link></p>

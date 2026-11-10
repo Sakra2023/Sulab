@@ -18,6 +18,7 @@ export default function Register() {
   const [error, setError] = useState('');
   const [cargando, setCargando] = useState(false);
   const [aceptaTerminos, setAceptaTerminos] = useState(false);
+  const [showModal, setShowModal] = useState(false); // ✅ Estado para el Modal
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -25,6 +26,12 @@ export default function Register() {
       ...formData,
       [e.target.name]: e.target.value
     });
+  };
+
+  // ✅ Función para cerrar el modal y marcar automáticamente el check
+  const handleCerrarModal = () => {
+    setShowModal(false);
+    setAceptaTerminos(true);
   };
 
   const handleSubmit = async (e) => {
@@ -209,21 +216,34 @@ export default function Register() {
           />
         </div>
 
+        {/* ✅ AQUÍ ESTÁ EL TEXTO LEGAL CON EL BOTÓN DEL MODAL */}
         <div className={styles.formGroup}>
-          <label className={styles.checkboxLabel}>
+          <label className={styles.checkboxLabel} style={{ fontSize: '0.85rem', color: '#555', textAlign: 'justify', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
             <input
               type="checkbox"
               checked={aceptaTerminos}
               onChange={(e) => setAceptaTerminos(e.target.checked)}
+              style={{ marginTop: '4px' }}
             />
-            Acepto los <Link to="/terminos" target="_blank" className={styles.link}>Términos y Condiciones</Link>
+            <span>
+              He leído y acepto los{' '}
+              <button 
+                type="button" 
+                onClick={() => setShowModal(true)} 
+                style={{ background: 'none', border: 'none', color: '#007bff', textDecoration: 'underline', cursor: 'pointer', padding: 0, font: 'inherit', fontWeight: 'bold' }}
+              >
+                Términos y Condiciones
+              </button>
+              {' '}y autorizo el tratamiento de mis datos personales para la gestión de mi cuenta, el sistema de puntos y mi participación en el ranking de Sulabb.
+            </span>
           </label>
         </div>
 
+        {/* ✅ BOTÓN DE REGISTRO (Se deshabilita si no hay check) */}
         <button
           type="submit"
-          disabled={cargando}
-          className={cargando ? styles.buttonDisabled : styles.button}
+          disabled={cargando || !aceptaTerminos}
+          className={(cargando || !aceptaTerminos) ? styles.buttonDisabled : styles.button}
         >
           {cargando ? 'Registrando...' : 'Registrarse'}
         </button>
@@ -233,10 +253,12 @@ export default function Register() {
         <span>O regístrate con</span>
       </div>
 
+      {/* ✅ BOTÓN DE GOOGLE (Mantiene estilos, se oscurece y bloquea si no hay check) */}
       <button
         onClick={handleGoogleRegister}
-        disabled={cargando}
+        disabled={cargando || !aceptaTerminos}
         className={styles.googleButton}
+        style={(cargando || !aceptaTerminos) ? { opacity: 0.5, cursor: 'not-allowed', filter: 'grayscale(100%)' } : {}}
       >
         <FcGoogle className={styles.googleIcon} />
         Google
@@ -246,6 +268,36 @@ export default function Register() {
         <p>¿Ya tienes cuenta? <Link to="/login" className={styles.link}>Inicia sesión aquí</Link></p>
         <p><Link to="/" className={styles.link}>← Volver al inicio</Link></p>
       </div>
+
+      {/* ✅ COMPONENTE MODAL (Ventana emergente con los términos) */}
+      {showModal && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
+          <div style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '10px', maxWidth: '600px', width: '90%', maxHeight: '80vh', overflowY: 'auto', color: '#333', boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}>
+            <h2 style={{ marginTop: 0, color: '#222', borderBottom: '2px solid #007bff', paddingBottom: '10px' }}>Términos y Condiciones de Sulabb</h2>
+            
+            <div style={{ fontSize: '0.9rem', lineHeight: '1.6', textAlign: 'justify' }}>
+              <p><strong>1. Tratamiento de Datos:</strong> Al registrarse, el usuario otorga su consentimiento libre, previo, expreso e informado para que Sulabb recolecte, almacene y trate sus datos personales (nombre, correo, foto) para la gestión de la cuenta y el sistema de puntos.</p>
+              
+              <p><strong>2. Ranking Público:</strong> El usuario acepta explícitamente que su nombre de usuario, foto y cantidad de puntos sean visibles de forma pública en la sección "Top LabPoints" de la plataforma.</p>
+              
+              <p><strong>3. Red de Emprendimientos:</strong> El usuario acepta que, al momento de canjear un premio o acumular puntos, Sulabb pueda compartir los datos estrictamente necesarios (nombre y correo) con el emprendimiento afiliado correspondiente para validar la transacción.</p>
+
+              <p><strong>4. Naturaleza de los Puntos:</strong> Los LabPoints no son dinero real, no tienen valor de cambio en efectivo y son de uso exclusivo dentro de la plataforma Sulabb.</p>
+              
+              <p><strong>5. Ley Aplicable:</strong> Estos términos se rigen bajo la Ley Orgánica de Protección de Datos Personales de la República del Ecuador.</p>
+            </div>
+
+            <div style={{ textAlign: 'right', marginTop: '25px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
+              <button 
+                onClick={handleCerrarModal}
+                style={{ padding: '10px 20px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem' }}
+              >
+                Aceptar y Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -35,7 +35,8 @@ const registroGoogleValidation = Joi.object({
   nombreUsuario: Joi.string().min(3).max(50).pattern(/^[a-zA-Z0-9_]+$/).allow(null).optional(),
   email: Joi.string().email().max(100).required(),
   googleId: Joi.string().min(5).max(255).required(),
-  photoURL: Joi.string().uri().max(500).allow(null).optional()
+  photoURL: Joi.string().uri().max(500).allow(null).optional(),
+  aceptaTerminos: Joi.boolean().valid(true).required() // ⬅️ ✅ VALIDACIÓN AÑADIDA
 });
 
 // ============================================
@@ -100,7 +101,8 @@ module.exports = (pool) => {
         });
       }
       
-      const { nombreCompleto, nombreUsuario, email, googleId, photoURL } = value;
+      // ✅ Extraemos aceptaTerminos del value validado
+      const { nombreCompleto, nombreUsuario, email, googleId, photoURL, aceptaTerminos } = value;
       
       // Generar nombre de usuario si no se proporciona
       const nombreUsuarioFinal = nombreUsuario || 
@@ -153,12 +155,12 @@ module.exports = (pool) => {
             });
           }
           
-          // Actualizar google_id si no tiene
+          // Actualizar google_id si no tiene (y guardar términos si aceptó)
           if (!user.google_id) {
             logger.info(`🔄 Actualizando google_id para usuario: ${user.id}`);
             await connection.query(
-              'UPDATE user SET google_id = ? WHERE id = ?',
-              [googleId, user.id]
+              'UPDATE user SET google_id = ?, acepto_terminos = ? WHERE id = ?',
+              [googleId, aceptaTerminos, user.id]
             );
             
             if (photoURL && !user.foto_url) {
@@ -167,6 +169,12 @@ module.exports = (pool) => {
                 [photoURL, user.id]
               );
             }
+          } else if (aceptaTerminos && user.acepto_terminos === 0) {
+            // Si ya tenía google_id pero no había aceptado términos, los actualizamos
+            await connection.query(
+              'UPDATE user SET acepto_terminos = ? WHERE id = ?',
+              [aceptaTerminos, user.id]
+            );
           }
           
           await connection.commit();
@@ -209,11 +217,12 @@ module.exports = (pool) => {
         
         const rol = 'usuario';
         
+        // ✅ INSERT modificado para guardar acepto_terminos
         const [userResult] = await connection.query(
           `INSERT INTO user 
-           (usuario, email, rol, google_id, foto_url, activo, fecha_registro) 
-           VALUES (?, ?, ?, ?, ?, 1, NOW())`,
-          [nombreFinal, email, rol, googleId, photoURL || null]
+           (usuario, email, rol, google_id, foto_url, activo, fecha_registro, acepto_terminos) 
+           VALUES (?, ?, ?, ?, ?, 1, NOW(), ?)`,
+          [nombreFinal, email, rol, googleId, photoURL || null, aceptaTerminos]
         );
 
         const userId = userResult.insertId;

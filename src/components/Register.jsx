@@ -4,6 +4,7 @@ import { auth, googleProvider } from '../firebase';
 import { signInWithPopup } from 'firebase/auth';
 import styles from '../assets/css/login.module.css';
 import { FcGoogle } from 'react-icons/fc';
+import { useAuth } from '../context/AuthContext';   // ⬅️ ✅ 1) IMPORT AÑADIDO (ajusta la ruta si es necesario)
 
 // ✅ Usar rutas relativas - el proxy de Nginx manejará la redirección
 const API_URL = ''; // Vacío para usar rutas relativas
@@ -20,6 +21,7 @@ export default function Register() {
   const [aceptaTerminos, setAceptaTerminos] = useState(false);
   const [showModal, setShowModal] = useState(false); // ✅ Estado para el Modal
   const navigate = useNavigate();
+  const { loginUser } = useAuth();                    // ⬅️ ✅ 2) HOOK AÑADIDO
 
   const handleChange = (e) => {
     setFormData({
@@ -132,11 +134,8 @@ export default function Register() {
       console.log("📥 Respuesta del backend:", data);
 
       if (data.success && data.token) {
-        // ✅ Loguear al usuario directamente en lugar de mandarlo al login
-        // NOTA: Asegúrate de tener: const { loginUser } = useAuth(); arriba en tu componente
-        if (typeof loginUser === 'function') {
-          loginUser(data.user, data.token);
-        }
+        // ✅ Loguear al usuario directamente
+        loginUser(data.user, data.token);   // ⬅️ ✅ 3) LLAMADA DIRECTA (ya sin el if)
 
         alert('¡Registro con Google exitoso! Bienvenido.');
 

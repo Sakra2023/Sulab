@@ -280,6 +280,7 @@ const colabInicio = require('./endpoint/colab/colab_inicio')(pool,io);
 const userPremios = require('./endpoint/user/user_Premios')(pool, io);  
 const principalPagina = require('./endpoint/principal/principal')(pool, io);
 const recuperacionPagina = require('./endpoint/principal/recuperacion')(pool);
+const registroGoogleRoutes = require('./endpoint/registroGoogle')(pool);
 
 // ============================================
 // CONEXIONES SOCKET.IO
@@ -473,6 +474,7 @@ app.post("/api/logout", (req, res) => {
 
 // RUTAS PÚBLICAS (sin autenticación)
 // ✅ CAMBIADO: Register con /api
+app.use('/api/registro/google', registroGoogleRoutes);   // ⬅️ ✅ LÍNEA AÑADIDA (registro con Google)
 app.use('/api/register', registerRoutes);
 app.use('/api/google', googleRoutes);
 app.use('/api/login-google', logingoogleRoutes);
@@ -548,6 +550,7 @@ server.listen(PORT, () => {
   console.log(`   POST   /api/login                - Login de usuarios ✅`);
   console.log(`   POST   /api/logout               - Cerrar sesión ✅`);
   console.log(`   POST   /api/register             - Registro de usuarios ✅`);
+  console.log(`   POST   /api/registro/google      - Registro con Google ✅`);
   console.log(`   POST   /api/forgot-password      - Solicitar recuperación de contraseña`);
   console.log(`   POST   /api/reset-password/:token - Resetear contraseña`);
   console.log(`   GET    /api/config-puntos        - Obtener configuración (público)`);

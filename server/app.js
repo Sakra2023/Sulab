@@ -280,7 +280,7 @@ const colabInicio = require('./endpoint/colab/colab_inicio')(pool,io);
 const userPremios = require('./endpoint/user/user_Premios')(pool, io);  
 const principalPagina = require('./endpoint/principal/principal')(pool, io);
 const recuperacionPagina = require('./endpoint/principal/recuperacion')(pool);
-const registroGoogleRoutes = require('./endpoint/registroGoogle')(pool);
+// ❌ ELIMINADA LA LÍNEA QUE CAUSABA EL ERROR: const registroGoogleRoutes = require('./endpoint/registroGoogle')(pool);
 
 // ============================================
 // CONEXIONES SOCKET.IO
@@ -473,8 +473,7 @@ app.post("/api/logout", (req, res) => {
 // ============================================
 
 // RUTAS PÚBLICAS (sin autenticación)
-// ✅ CAMBIADO: Register con /api
-app.use('/api/registro/google', registroGoogleRoutes);   // ⬅️ ✅ LÍNEA AÑADIDA (registro con Google)
+app.use('/api/registro/google', googleRoutes);  // ⬅️ ✅ CORREGIDO: usa googleRoutes
 app.use('/api/register', registerRoutes);
 app.use('/api/google', googleRoutes);
 app.use('/api/login-google', logingoogleRoutes);

@@ -1612,7 +1612,7 @@ module.exports = (pool, ioParam) => {
   );
 
   // Servir archivos PDF estáticos
-  router.use('/facturas_pdf', express.static(pdfDir));
+ //router.use('/facturas_pdf', express.static(pdfDir));
 
   router.initSocket = initSocket;
   return router;

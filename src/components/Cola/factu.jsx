@@ -988,25 +988,24 @@ const FacturacionColab = () => {
     return vuelto >= 0 ? vuelto : 0;
   };
 
-  // ✅ CORRECCIÓN: Ver PDF de la factura en modal usando blob URL para evitar X-Frame-Options
+  // ✅ CORRECCIÓN APLICADA AQUÍ: Ver PDF sin headers y forzando extensión .pdf
   const verPDFFactura = async (factura) => {
     if (factura && factura.ruta_pdf) {
       setPdfError(false);
       setFacturaSeleccionada(factura);
       setModalFacturaVisible(true);
 
-      let rutaLimpia = factura.ruta_pdf;
-      if (rutaLimpia.startsWith('/')) {
-        rutaLimpia = rutaLimpia.substring(1);
+      // 🔥 FORZAMOS LA EXTENSIÓN .PDF (por si la BD dice .html)
+      let rutaLimpia = factura.ruta_pdf.replace('.html', '.pdf');
+      
+      // Nos aseguramos de que empiece con /
+      if (!rutaLimpia.startsWith('/')) {
+        rutaLimpia = `/${rutaLimpia}`;
       }
 
-      // ✅ CORRECCIÓN: ruta relativa
-      const pdfUrlCompleta = `/${rutaLimpia}`;
-
       try {
-        const response = await fetch(pdfUrlCompleta, {
-          headers: getAuthHeaders()
-        });
+        // ✅ SIN HEADERS: Es un archivo estático público
+        const response = await fetch(rutaLimpia);
 
         if (response.ok) {
           const blob = await response.blob();
@@ -1014,7 +1013,7 @@ const FacturacionColab = () => {
           setPdfUrl(blobUrl);
         } else {
           setPdfError(true);
-          console.error('Error fetching PDF:', response.status);
+          console.error('Error fetching PDF:', response.status, rutaLimpia);
         }
       } catch (error) {
         console.error('Error cargando PDF:', error);

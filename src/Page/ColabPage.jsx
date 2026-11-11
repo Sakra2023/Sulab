@@ -4,7 +4,8 @@ import { useAuth } from "../context/AuthContext";
 import { useState, useEffect } from "react";
 import styles from '../assets/css/prinnn.module.css'; 
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+// ✅ CORRECCIÓN: Usar rutas relativas (Nginx hace el proxy en producción)
+const API_URL = ''; 
 
 export default function ColabPage() {
   const { user, token } = useAuth();
@@ -40,6 +41,7 @@ export default function ColabPage() {
       }
       
       try {
+        // ✅ CORRECCIÓN: Ruta relativa
         const response = await fetch(`${API_URL}/api/colab/emprendimiento/propietario/${user.id}`, {
           headers: {
             'Authorization': `Bearer ${authToken}`,
@@ -65,13 +67,13 @@ export default function ColabPage() {
           console.log('✅ Emprendimiento ID:', data.emprendimiento.id);
         } else {
           console.error('❌ Error en respuesta:', data.message);
-          // ✅ FALLBACK: Si el endpoint no funciona, usar ID 1 (según logs el usuario 5 tiene emprendimiento ID 1)
+          // ⚠️ FALLBACK: Solo si el backend dice que no hay emprendimiento
           console.log('⚠️ Usando emprendimiento ID por defecto: 1');
           setEmprendimientoId(1);
         }
       } catch (error) {
         console.error("❌ Error cargando emprendimiento:", error);
-        // ✅ FALLBACK: En caso de error, usar ID 1
+        // ⚠️ FALLBACK: Solo si hay error de red
         console.log('⚠️ Usando emprendimiento ID por defecto: 1');
         setEmprendimientoId(1);
       } finally {
